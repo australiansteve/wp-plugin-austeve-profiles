@@ -145,20 +145,23 @@ endif;
 add_shortcode( 'member_directory', 'austeve_profiles_shortcode_archive' );
 
 function austeve_profiles_shortcode_archive(){
+	ob_start();
     $args = array(
         'post_type' => 'austeve-profiles'
     );
 
-    $string = '<div class="row">';
+    echo '<div class="row archive-container">';
     $query = new WP_Query( $args );
     if( $query->have_posts() ){
         while( $query->have_posts() ){
             $query->the_post();
-            include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');
+
+            include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');             
         }
     }
-    $string .= '</div>';
+    echo '</div>';
+    
     wp_reset_postdata();
-    return $string;
+    return ob_get_clean();
 }
 ?>

@@ -1,0 +1,28 @@
+.archive-container {
+	margin-bottom: 2rem;
+
+	.profile-image {
+		padding: 0;
+		text-align: center;
+
+		img {
+			margin: auto;
+			margin-bottom: 0.75rem;
+		}
+	}
+
+	h2.profile-title {
+		font-size: 1rem;
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+
+	a {
+		color: #000;
+	}
+
+	.profile-archive-item {
+    	margin-bottom: 3rem;
+    	border-bottom: 1px dotted #000;
+	}
+}
