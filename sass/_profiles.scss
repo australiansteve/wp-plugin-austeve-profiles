@@ -1,6 +1,7 @@
 .archive-container {
 	margin-bottom: 2rem;
-
+	font-size: 0.9rem;
+	
 	.profile-image {
 		padding: 0;
 		text-align: center;
@@ -12,8 +13,8 @@
 	}
 
 	h2.profile-title {
-		font-size: 1rem;
-		margin-bottom: 1rem;
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
 		text-align: center;
 	}
 
@@ -24,5 +25,10 @@
 	.profile-archive-item {
     	margin-bottom: 3rem;
     	border-bottom: 1px dotted #000;
+	}
+
+
+	p.profile-view-link {
+		text-align: right;
 	}
 }

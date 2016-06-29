@@ -28,8 +28,15 @@
 			</a>
 
 			<p class="profile-blurb"><em><?php echo get_field('profile-blurb'); ?></em></p>
+
 		</div>
 
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<p class="profile-view-link"><a href="<?php echo get_permalink(); ?>">View profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></p>
+		</div>
 	</div>
 
 </div>

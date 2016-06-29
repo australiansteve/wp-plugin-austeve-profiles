@@ -6,5 +6,16 @@
 		h2.profile-title {
 			text-align: left;
 		}
+
+		.profile-archive-item {
+	    	min-height: 8rem;
+		}
+
+		.profile-image {
+
+			img {
+				margin-bottom: 0;
+			}
+		}
 	}
 }
