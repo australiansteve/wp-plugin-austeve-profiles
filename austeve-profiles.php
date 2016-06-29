@@ -103,6 +103,7 @@ add_filter( 'template_include', 'profile_include_template_function', 1 );
 
 function austeve_profiles_enqueue_style() {
 	wp_enqueue_style( 'austeve-profiles', plugin_dir_url( __FILE__ ). '/style.css' , false , '4.6'); 
+	wp_enqueue_style( 'fontawesome_styles', plugin_dir_url( __FILE__ ). '/assets/dist/css/font-awesome.css', '', '9' );
 }
 
 function austeve_profiles_enqueue_script() {
@@ -147,7 +148,9 @@ add_shortcode( 'member_directory', 'austeve_profiles_shortcode_archive' );
 function austeve_profiles_shortcode_archive(){
 	ob_start();
     $args = array(
-        'post_type' => 'austeve-profiles'
+        'post_type' => 'austeve-profiles',
+        'orderby'        => 'title',
+    	'order'          => 'ASC',
     );
 
     echo '<div class="row archive-container">';

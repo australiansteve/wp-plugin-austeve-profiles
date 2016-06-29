@@ -32,10 +32,10 @@ gulp.task('styles', function() {
 });
 
 //Our 'deploy' task which deploys on a local dev environment
-
 gulp.task('deploylocal', function() {
 
 	var files = [
+		'assets/dist/**/*', 
 		'page-templates/**/*.php',
 		'js/**/*.js',
 		'*.php',
@@ -47,5 +47,30 @@ gulp.task('deploylocal', function() {
 	        .pipe(gulp.dest(dest));
 });
 
+// Our 'fonts' task, which handles our sass actions such as compliling and minification
+gulp.task('fonts', function() {
+		
+		gulp.src('./node_modules/font-awesome/fonts/**/*', {base: './node_modules/font-awesome/fonts'})
+		.pipe(gulp.dest('./assets/dist/fonts'));
+
+		gulp.src('./node_modules/font-awesome/scss/**/*.scss')
+		.pipe(sass({
+			style: 'expanded',
+			sourceComments: true
+		})
+		.on('error', notify.onError(function(error) {
+			return "Error: " + error.message;
+		}))
+		)
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions', 'ie >= 8']
+		})) // our autoprefixer - add and remove vendor prefixes using caniuse.com
+		.pipe(gulp.dest('./assets/dist/css')) // Location of our .css file
+		.pipe(notify({
+			message: "Font task complete!"
+		}));
+
+
+});
 // Our default gulp task, which runs all of our tasks upon typing in 'gulp' in Terminal
 gulp.task('default', ['styles', 'deploylocal']);
