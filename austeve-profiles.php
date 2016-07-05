@@ -42,7 +42,7 @@ function austeve_create_profiles_post_type() {
 		'description'         => __( 'User profiles', 'austeve-profiles' ),
 		'labels'              => $labels,
 		// Features this CPT supports in Post Editor
-		'supports'            => array( 'title', 'author', 'revisions', ),
+		'supports'            => array( 'author', 'revisions', ),
 		// You can associate this CPT with a taxonomy or custom taxonomy. 
 		'taxonomies'          => array( ),
 		/* A hierarchical CPT is like Pages and can have
@@ -149,7 +149,7 @@ function austeve_profiles_shortcode_archive(){
 	ob_start();
     $args = array(
         'post_type' => 'austeve-profiles',
-        'orderby'        => 'title',
+        'orderby'        => 'profile-user',
     	'order'          => 'ASC',
     );
 
@@ -167,4 +167,22 @@ function austeve_profiles_shortcode_archive(){
     wp_reset_postdata();
     return ob_get_clean();
 }
+
+function modify_post_title( $post_id )
+{
+	if ('austeve-profiles' != get_post_type() || wp_is_post_revision($post_id)) {
+		return;
+	}
+
+	$user = get_field('profile-user'); 
+	update_field( 'profile-firstname', $user['user_firstname'],  $post_id );
+	update_field( 'profile-lastname', $user['user_lastname'],  $post_id );
+	
+	remove_action( 'acf/save_post', 'modify_post_title' , 50);
+	wp_update_post( array( 'ID' => $post_id, 'post_title' => $user['user_firstname']." ".$user['user_lastname'] ) );
+	add_action( 'acf/save_post', 'modify_post_title' , 50);
+}
+
+add_action( 'acf/save_post' , 'modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
+
 ?>

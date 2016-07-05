@@ -24,8 +24,20 @@
 		<div class="col-xs-12 col-sm-9">
 
 			<a href="<?php echo get_permalink(); ?>">
-				<?php the_title( '<h2 class="profile-title">', '</h2>' ); ?>
+				<h2 class="profile-name">
+				<?php $user = get_field('profile-user'); 
+				//var_dump($user);
+				echo $user['user_firstname']." ".$user['user_lastname'];
+				?>
+				</h2>
 			</a>
+
+			<p class="profile-membership-type"><?php 
+			$field = get_field_object('profile-membership-type');
+			$value = get_field('profile-membership-type');
+			$label = $field['choices'][ $value ];
+
+			echo $label; ?></p>
 
 			<p class="profile-blurb"><em><?php echo get_field('profile-blurb'); ?></em></p>
 

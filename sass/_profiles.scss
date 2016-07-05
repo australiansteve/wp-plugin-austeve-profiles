@@ -2,6 +2,20 @@
 	margin-bottom: 2rem;
 	font-size: 0.9rem;
 	
+	p { 
+		margin-bottom: 0.5rem;
+	}
+
+	a {
+		color: #000;
+	}
+
+	h2.profile-name {
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
+		text-align: center;
+	}
+
 	.profile-image {
 		padding: 0;
 		text-align: center;
@@ -10,16 +24,6 @@
 			margin: auto;
 			margin-bottom: 0.75rem;
 		}
-	}
-
-	h2.profile-title {
-		font-size: 1.1rem;
-		margin-bottom: 0.4rem;
-		text-align: center;
-	}
-
-	a {
-		color: #000;
 	}
 
 	.profile-archive-item {
@@ -31,4 +35,5 @@
 	p.profile-view-link {
 		text-align: right;
 	}
+
 }
