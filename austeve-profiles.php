@@ -44,7 +44,7 @@ function austeve_create_profiles_post_type() {
 		// Features this CPT supports in Post Editor
 		'supports'            => array( 'author', 'revisions', ),
 		// You can associate this CPT with a taxonomy or custom taxonomy. 
-		'taxonomies'          => array( ),
+		'taxonomies'          => array( 'medium' ),
 		/* A hierarchical CPT is like Pages and can have
 		* Parent and child items. A non-hierarchical CPT
 		* is like Posts.
@@ -66,6 +66,37 @@ function austeve_create_profiles_post_type() {
 	
 	// Registering your Custom Post Type
 	register_post_type( 'austeve-profiles', $args );
+
+	$taxonomyLabels = array(
+		'name'              => _x( 'Mediums', 'taxonomy general name' ),
+		'singular_name'     => _x( 'Medium', 'taxonomy singular name' ),
+		'search_items'      => __( 'Search Mediums' ),
+		'all_items'         => __( 'All Mediums' ),
+		'parent_item'       => __( 'Parent Medium' ),
+		'parent_item_colon' => __( 'Parent Parent:' ),
+		'edit_item'         => __( 'Edit Medium' ),
+		'update_item'       => __( 'Update Medium' ),
+		'add_new_item'      => __( 'Add New Medium' ),
+		'new_item_name'     => __( 'New Medium' ),
+		'menu_name'         => __( 'Mediums' ),
+	);
+
+	$taxonomyArgs = array(
+
+		'label'               => __( 'austeve_mediums', 'austeve-profiles' ),
+		'labels'              => $taxonomyLabels,
+		'show_admin_column'	=> false,
+		'hierarchical' 		=> true,
+		'rewrite'           => array( 'slug' => 'medium' ),
+		'capabilities'		=> array(
+							    'manage_terms' => 'manage_categories',
+							    'edit_terms' => 'manage_categories',
+							    'delete_terms' => 'manage_categories',
+							    'assign_terms' => 'edit_posts'
+							 )
+		);
+
+	register_taxonomy( 'austeve_mediums', 'austeve-profiles', $taxonomyArgs );
 
 }
 
