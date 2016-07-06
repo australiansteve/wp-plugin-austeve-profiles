@@ -20,6 +20,23 @@
 			<img src='<?php echo $image['sizes']['medium'] ?>' />
 		</div>
 
+		<div class="row profile-mediums">
+			<?php $mediums = get_field('profile-mediums'); ?>
+			<label>Media:</label>
+			<?php 
+			$medialist = "";
+			
+			foreach ($mediums as $medium)
+			{
+				$medialist .= "<a href='".get_term_link($medium)."'>";
+				$medialist .= $medium->name;
+				$medialist .= "</a>, ";
+			}
+			$medialist = substr($medialist, 0, strlen($medialist) - 2);
+			
+			echo $medialist;
+			?>
+		</div>
 		<?php
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'austeve-profiles' ),
