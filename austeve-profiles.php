@@ -216,4 +216,38 @@ function modify_post_title( $post_id )
 
 add_action( 'acf/save_post' , 'modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
 
+function update_post_title_with_new_username( $user_id, $old_user_data ) 
+{
+	error_log("User ".$user_id." updated. ".$old_user_data->user_firstname." ".$old_user_data->user_lastname );
+
+	// args
+	$args = array(
+		'numberposts'	=> -1,
+		'post_type'		=> 'austeve-profiles',
+		'meta_key'		=> 'profile-user',
+		'meta_value'	=> $user_id
+	);
+
+	// query
+	$the_query = new WP_Query( $args );
+
+	if( $the_query->have_posts() ):
+			while( $the_query->have_posts() ) : $the_query->the_post();
+
+				if ($old_user_data->user_firstname !== get_field('profile-firstname'))
+				{
+					update_field('profile-firstname', $old_user_data->user_firstname);
+				}
+
+				if ($old_user_data->user_lastname !== get_field('profile-lastname'))
+				{
+					update_field('profile-lastname', $old_user_data->user_lastname);
+				}
+
+			endwhile;
+	endif;
+
+}
+add_action( 'profile_update', 'update_post_title_with_new_username', 5, 2);
+
 ?>
