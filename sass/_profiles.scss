@@ -37,3 +37,49 @@
 	}
 
 }
+
+article.austeve-profiles {
+
+	text-align: center;
+	max-width: 700px;
+	margin: auto;
+
+	.row {
+		padding: 1rem 0.75rem;
+	}
+
+	div.profile-about::before {
+		border-top: 1px dotted;
+		width: 50%;
+		display: inline-block;
+		padding-bottom: 1rem;
+	}
+
+	div.profile-social a {
+		margin: 0 0.5rem;
+	}
+
+	h1.entry-title {
+		background-color: rgba(0,0,0,0.8);
+    	color: #FFF;
+    	padding: 1.5rem;
+    	text-transform: uppercase;
+    	font-size: 1.875em;
+    	position: relative;
+	}
+
+	h1.entry-title:after {
+	    content: '';
+	    display: block;
+	    position: absolute;
+	    bottom: -10px;
+	    left: 50%;
+	    margin-left: -5px;
+	    width: 0;
+	    height: 0;
+	    border-left: 10px solid transparent;
+	    border-right: 10px solid transparent;
+	    border-top: 10px solid transparent;
+	    border-top-color: rgba(0,0,0,0.8);
+	}
+}

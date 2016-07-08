@@ -86,7 +86,7 @@ function austeve_create_profiles_post_type() {
 		'label'               => __( 'austeve_mediums', 'austeve-profiles' ),
 		'labels'              => $taxonomyLabels,
 		'show_admin_column'	=> false,
-		'hierarchical' 		=> true,
+		'hierarchical' 		=> false,
 		'rewrite'           => array( 'slug' => 'medium' ),
 		'capabilities'		=> array(
 							    'manage_terms' => 'manage_categories',
