@@ -65,6 +65,16 @@
 			?>
 		</div>
 
+		<?php $location = get_field('profile-location'); 
+		if ($location)
+		{
+
+			echo '<div class="row profile-location">';
+			echo "<label>Location: </label> ".$location;
+			echo '</div>';
+		}
+		?>
+
 		<div class="row profile-mediums">
 			<?php $mediums = get_field('profile-mediums'); ?>
 			<label>Media:</label>

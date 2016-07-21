@@ -180,8 +180,10 @@ function austeve_profiles_shortcode_archive(){
 	ob_start();
     $args = array(
         'post_type' => 'austeve-profiles',
-        'orderby'        => 'profile-user',
+        'meta_key'        => 'profile-lastname',
+        'orderby'        => 'meta_value',
     	'order'          => 'ASC',
+		'posts_per_page' => -1
     );
 
     echo '<div class="row archive-container">';
