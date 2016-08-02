@@ -63,6 +63,12 @@
 				echo "<a href='".$instagram."' target='blank' title=\"Visit ".$firstname." Instagram profile\" alt='Instagram'><i class='fa fa-2x fa-instagram' aria-hidden='true'></i></a>";
 			}
 			?>
+			<?php $tumblr = get_field('profile-tumblr'); 
+			if ($tumblr)
+			{
+				echo "<a href='".$tumblr."' target='blank' title=\"Visit ".$firstname." Tumblr profile\" alt='Tumblr'><i class='fa fa-2x fa-tumblr' aria-hidden='true'></i></a>";
+			}
+			?>
 		</div>
 
 		<?php $location = get_field('profile-location'); 
@@ -75,24 +81,29 @@
 		}
 		?>
 
-		<div class="row profile-mediums">
-			<?php $mediums = get_field('profile-mediums'); ?>
-			<label>Media:</label>
-			<?php 
-			$medialist = "";
-			
-			foreach ($mediums as $medium)
-			{
-				$medialist .= "<a href='".get_term_link($medium)."'>";
-				$medialist .= $medium->name;
-				$medialist .= "</a>, ";
-			}
-			$medialist = substr($medialist, 0, strlen($medialist) - 2);
-			
-			echo $medialist;
-			?>
-		</div>
+		<?php $mediums = get_field('profile-mediums'); 
 
+		if ($mediums) {
+		?>
+			<div class="row profile-mediums">
+				<label>Media:</label>
+				<?php 
+				$medialist = "";
+				
+				foreach ($mediums as $medium)
+				{
+					$medialist .= "<a href='".get_term_link($medium)."'>";
+					$medialist .= $medium->name;
+					$medialist .= "</a>, ";
+				}
+				$medialist = substr($medialist, 0, strlen($medialist) - 2);
+				
+				echo $medialist;
+				?>
+			</div>
+		<?php
+		}
+		?>
 		<div class="row profile-about">
 			<?php $about = get_field('profile-about'); 
 			if ($about)

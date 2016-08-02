@@ -201,6 +201,49 @@ function austeve_profiles_shortcode_archive(){
     return ob_get_clean();
 }
 
+add_shortcode( 'member_edit_profile', 'austeve_profiles_shortcode_edit_profile' );
+
+function austeve_profiles_shortcode_edit_profile(){
+	
+	if ( is_user_logged_in() ) {
+	    $current_user = wp_get_current_user();
+        printf( 'Welcome, %s!', esc_html( $current_user->user_firstname ) );
+
+		// args
+		$args = array(
+			'numberposts'	=> 1,
+			'post_type'		=> 'austeve-profiles',
+			'meta_key'		=> 'profile-user',
+			'meta_value'	=> ''.$current_user->ID
+		);
+
+		// query
+		$the_query = new WP_Query( $args );
+
+		if( $the_query->have_posts() ): 
+			while( $the_query->have_posts() ) : $the_query->the_post();
+				
+            		if (locate_template('page-templates/partials/profiles-edit.php') != '') {
+						// yep, load the page template
+						get_template_part('page-templates/partials/profiles', 'edit');
+					} else {
+						// nope, load the default
+						include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-edit.php');
+					}
+
+			endwhile; 
+		else: 
+			echo "<p>Profile not found. User ".$current_user->ID ;
+		endif; 
+
+		wp_reset_query();	 // Restore global post data stomped by the_post().
+
+	} else {
+	    echo 'You are not logged in.';
+	}
+
+}
+
 function modify_post_title( $post_id )
 {
 	if ('austeve-profiles' != get_post_type() || wp_is_post_revision($post_id)) {
