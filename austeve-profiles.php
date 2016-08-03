@@ -11,6 +11,7 @@
 
 include( plugin_dir_path( __FILE__ ) . 'admin.php');
 include( plugin_dir_path( __FILE__ ) . 'widget.php');
+include( plugin_dir_path( __FILE__ ) . 'AUSteveProfilesPageTemplater.php');
 
 /*
 * Creating a function to create our CPT
@@ -180,6 +181,7 @@ function austeve_profiles_shortcode_archive(){
 	ob_start();
     $args = array(
         'post_type' => 'austeve-profiles',
+        'post_status' => array('publish', 'pending'),
         'meta_key'        => 'profile-lastname',
         'orderby'        => 'meta_value',
     	'order'          => 'ASC',
@@ -191,8 +193,13 @@ function austeve_profiles_shortcode_archive(){
     if( $query->have_posts() ){
         while( $query->have_posts() ){
             $query->the_post();
-
-            include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');             
+                       
+            if (get_post_status() == 'publish') {
+				include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');
+			}
+			else {
+				include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive-pending.php');
+			}		           
         }
     }
     echo '</div>';
@@ -201,52 +208,9 @@ function austeve_profiles_shortcode_archive(){
     return ob_get_clean();
 }
 
-add_shortcode( 'member_edit_profile', 'austeve_profiles_shortcode_edit_profile' );
-
-function austeve_profiles_shortcode_edit_profile(){
-	
-	if ( is_user_logged_in() ) {
-	    $current_user = wp_get_current_user();
-        printf( 'Welcome, %s!', esc_html( $current_user->user_firstname ) );
-
-		// args
-		$args = array(
-			'numberposts'	=> 1,
-			'post_type'		=> 'austeve-profiles',
-			'meta_key'		=> 'profile-user',
-			'meta_value'	=> ''.$current_user->ID
-		);
-
-		// query
-		$the_query = new WP_Query( $args );
-
-		if( $the_query->have_posts() ): 
-			while( $the_query->have_posts() ) : $the_query->the_post();
-				
-            		if (locate_template('page-templates/partials/profiles-edit.php') != '') {
-						// yep, load the page template
-						get_template_part('page-templates/partials/profiles', 'edit');
-					} else {
-						// nope, load the default
-						include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-edit.php');
-					}
-
-			endwhile; 
-		else: 
-			echo "<p>Profile not found. User ".$current_user->ID ;
-		endif; 
-
-		wp_reset_query();	 // Restore global post data stomped by the_post().
-
-	} else {
-	    echo 'You are not logged in.';
-	}
-
-}
-
-function modify_post_title( $post_id )
+function austeve_profiles_modify_post_title( $post_id )
 {
-	if ('austeve-profiles' != get_post_type() || wp_is_post_revision($post_id)) {
+	if ('austeve-profiles' != get_post_type($post_id) || wp_is_post_revision($post_id)) {
 		return;
 	}
 
@@ -259,7 +223,26 @@ function modify_post_title( $post_id )
 	add_action( 'acf/save_post', 'modify_post_title' , 50);
 }
 
-add_action( 'acf/save_post' , 'modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
+add_action( 'acf/save_post' , 'austeve_profiles_modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
+
+function austeve_profiles_save_as_pending( $post_id ) {
+
+	//Return is it's not saving from the front end, or isn't a profile
+	if (is_admin() || get_post_type($post_id) != 'austeve-profiles'){
+		return $post_id;
+	}
+
+	//Otherwise, set the post status to draft & save!
+	$args = array (
+		'ID' => $post_id,
+		'post_status' => 'pending'
+		);
+	wp_update_post($args);
+	return $post_id;
+}
+
+add_action( 'acf/pre_save_post' , 'austeve_profiles_save_as_pending' , 10, 1 ); 
+
 
 function update_post_title_with_new_username( $user_id, $old_user_data ) 
 {
@@ -294,5 +277,8 @@ function update_post_title_with_new_username( $user_id, $old_user_data )
 
 }
 add_action( 'profile_update', 'update_post_title_with_new_username', 5, 2);
+
+//Adds a page template so that 'Edit Profile' can be done
+add_action( 'plugins_loaded', array( 'AUSteveProfilesPageTemplater', 'get_instance' ) );
 
 ?>

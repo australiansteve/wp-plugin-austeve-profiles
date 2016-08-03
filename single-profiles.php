@@ -6,40 +6,43 @@
  *
  * @package AUSteve Projects
  */
+?>
 
-get_header(); ?>
+<?php get_header(); ?>
 
 <div class="row"><!-- .row start -->
 
 	<div class="col-sm-12"><!-- .col-sm-12 start -->
 
 		<div id="primary" class="content-area">
-			<main id="main" class="site-main" role="main">
 
-			<?php while ( have_posts() ) : the_post(); ?>
-				
-				<?php 
+			<div id="content" class="site-content" role="main">
 
-            		if (locate_template('page-templates/partials/profiles-single.php') != '') {
-						// yep, load the page template
-						get_template_part('page-templates/partials/profiles', 'single');
-					} else {
-						// nope, load the default
-						include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-single.php');
-					}
+				<?php while ( have_posts() ) : the_post(); ?>
 
-				?>
-				
-				<?php 
-				the_post_navigation(array(
-			        'prev_text'          => '<i class="fa fa-arrow-left"></i> Previous',
-			        'next_text'          => 'Next <i class="fa fa-arrow-right"></i>',
-			        'screen_reader_text' => __( 'More profiles:' ),
-			    )); ?>
+					<?php 
+						
+	            		if (locate_template('page-templates/partials/profiles-single.php') != '') {
+							// yep, load the page template
+							get_template_part('page-templates/partials/profiles', 'single');
+						} else {
+							// nope, load the default
+							include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-single.php');
+						}
+						
+					?>			
 
-			<?php endwhile; // end of the loop. ?>
+					<?php 
+					the_post_navigation(array(
+				        'prev_text'          => '<i class="fa fa-arrow-left"></i> Previous',
+				        'next_text'          => 'Next <i class="fa fa-arrow-right"></i>',
+				        'screen_reader_text' => __( 'More profiles:' ),
+				    )); ?>
 
-			</main><!-- #main -->
+				<?php endwhile; ?>
+
+			</div><!-- #content -->
+
 		</div><!-- #primary -->
 
 	</div><!-- .col-sm-12 end -->
