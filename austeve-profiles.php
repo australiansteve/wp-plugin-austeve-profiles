@@ -139,7 +139,15 @@ function austeve_profiles_enqueue_style() {
 }
 
 function austeve_profiles_enqueue_script() {
-	//wp_enqueue_script( 'my-js', 'filename.js', false );
+
+	if ( WP_DEBUG )
+	{
+		wp_enqueue_script( 'austeve-profiles-js', plugin_dir_url( __FILE__ ). '/assets/dist/js/front-end.js' , array( 'jquery' ) , '1.0'); 
+	}
+	else 
+	{
+		wp_enqueue_script( 'austeve-profiles-js', plugin_dir_url( __FILE__ ). '/assets/dist/js/front-end.min.js' , array( 'jquery' ) , '1.0'); 
+	}
 }
 
 add_action( 'wp_enqueue_scripts', 'austeve_profiles_enqueue_style' );
@@ -214,12 +222,29 @@ function austeve_profiles_modify_post_title( $post_id )
 		return;
 	}
 
-	$user = get_field('profile-user'); 
-	update_field( 'profile-firstname', $user['user_firstname'],  $post_id );
-	update_field( 'profile-lastname', $user['user_lastname'],  $post_id );
+	$user = get_field('profile-user', $post_id);
+	$userfirstname = "";
+	$userlastname = "";
+	//If user field is not set in the profile, grab the current logged in user
+	if (!$user)
+	{
+		$user = wp_get_current_user();
+		update_field( 'profile-user', get_current_user_id(),  $post_id );
+		$userfirstname = $user->user_firstname;
+		$userlastname = $user->user_lastname;
+	} 
+
+	else {
+		$userfirstname = $user['user_firstname'];
+		$userlastname = $user['user_lastname'];
+	}
+
+	update_field( 'profile-firstname', $userfirstname,  $post_id );
+	update_field( 'profile-lastname', $userlastname,  $post_id );
 	
 	remove_action( 'acf/save_post', 'modify_post_title' , 50);
-	wp_update_post( array( 'ID' => $post_id, 'post_title' => $user['user_firstname']." ".$user['user_lastname'] ) );
+	$slug = str_replace(' ', '-', $userfirstname." ".$userlastname);
+	wp_update_post( array( 'ID' => $post_id, 'post_title' => $userfirstname." ".$userlastname, 'post_name' => $slug ) );
 	add_action( 'acf/save_post', 'modify_post_title' , 50);
 }
 
@@ -233,11 +258,13 @@ function austeve_profiles_save_as_pending( $post_id ) {
 	}
 
 	//Otherwise, set the post status to draft & save!
+	
 	$args = array (
 		'ID' => $post_id,
-		'post_status' => 'pending'
+		'post_status' => 'pending',
 		);
 	wp_update_post($args);
+
 	return $post_id;
 }
 
@@ -277,6 +304,19 @@ function update_post_title_with_new_username( $user_id, $old_user_data )
 
 }
 add_action( 'profile_update', 'update_post_title_with_new_username', 5, 2);
+
+//Sanitizes post data to strip out HTML from the profile fields
+function austeve_profiles_kses_post( $value ) {
+	
+	// is array
+	if( is_array($value) ) {	
+		return array_map('austeve_profiles_kses_post', $value);
+	}
+	
+	// return
+	return wp_kses_post( $value );
+}
+add_filter('acf/update_value', 'austeve_profiles_kses_post', 10, 1);
 
 //Adds a page template so that 'Edit Profile' can be done
 add_action( 'plugins_loaded', array( 'AUSteveProfilesPageTemplater', 'get_instance' ) );

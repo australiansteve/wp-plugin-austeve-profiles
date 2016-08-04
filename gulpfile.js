@@ -37,7 +37,6 @@ gulp.task('deploylocal', function() {
 	var files = [
 		'assets/dist/**/*', 
 		'page-templates/**/*.php',
-		'js/**/*.js',
 		'*.php',
 		'*.css'];
 
@@ -72,5 +71,23 @@ gulp.task('fonts', function() {
 
 
 });
+
+
+////////////////////////////////////////////////////////////////////////////////
+// JS
+////////////////////////////////////////////////////////////////////////////////
+
+gulp.task('js', function() {
+	return gulp.src('js/front-end.js')
+		.pipe(gulp.dest('./assets/dist/js')) //Copy the file as is
+		.pipe(uglify().on('error', notify.onError(function(error) {
+			return "Error: " + error.message;
+			}))
+		)
+		.pipe(concat('front-end.min.js')) //Copy the uglified version
+		.pipe(gulp.dest('./assets/dist/js'))
+		.pipe(notify({ message: "✔︎ Scripts task complete!"}));
+});
+
 // Our default gulp task, which runs all of our tasks upon typing in 'gulp' in Terminal
 gulp.task('default', ['styles', 'deploylocal']);

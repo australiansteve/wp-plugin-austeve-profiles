@@ -13,19 +13,25 @@
 
 		<div class="col-xs-12 col-sm-3 profile-image">
 			<!-- Display placeholder image -->
-			<?php $image = get_field('profile-picture');
-
-			//var_dump($image); ?>
-
 			<img src='<?php echo plugin_dir_url( __FILE__ ).'../../assets/dist/images/profile-placeholder.png'; ?>' alt='Profile picture' height='150px' width='150px'/>
 		</div>
 
 		<div class="col-xs-12 col-sm-9">
 
 			<h2 class="profile-name">
-			<?php $user = get_field('profile-user'); 
-			//var_dump($user);
-			echo $user['user_firstname']." ".$user['user_lastname'];
+			<?php 
+			$user = get_field('profile-user');
+
+			//If the profile has already been published once, user is returned as an array
+			if (is_array($user))
+			{
+				echo $user['user_firstname']." ".$user['user_lastname'];
+			}
+			else {
+				//otherwise, just the user ID is returned. Not sure why.
+				$user = get_user_by('id', $user); 
+				echo $user->user_firstname." ".$user->user_lastname;
+			}
 			?>
 			</h2>
 

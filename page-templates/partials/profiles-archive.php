@@ -12,13 +12,17 @@
 	<div class="row">
 
 		<div class="col-xs-12 col-sm-3 profile-image">
-			<?php $image = get_field('profile-picture');
+			<?php $image = get_field('profile-picture'); ?>
 
-			//var_dump($image); ?>
-
+			<?php if ($image) { ?>
 			<a href="<?php echo get_permalink(); ?>">
 				<img src='<?php echo $image['sizes']['thumbnail'] ?>'/>
 			</a>
+			<?php } else  { ?>
+			<!-- Display placeholder image -->
+			<img src='<?php echo plugin_dir_url( __FILE__ ).'../../assets/dist/images/profile-placeholder.png'; ?>' alt='Profile picture' height='150px' width='150px'/>
+			<?php } ?>
+
 		</div>
 
 		<div class="col-xs-12 col-sm-9">
@@ -26,7 +30,7 @@
 			<a href="<?php echo get_permalink(); ?>">
 				<h2 class="profile-name">
 				<?php $user = get_field('profile-user'); 
-				//var_dump($user);
+
 				echo $user['user_firstname']." ".$user['user_lastname'];
 				?>
 				</h2>
@@ -37,7 +41,16 @@
 			$value = get_field('profile-membership-type');
 			$label = $field['choices'][ $value ];
 
-			echo $label; ?></p>
+			echo $label;
+			
+			$location = get_field('profile-location');
+
+			if ($location)
+			{
+				echo " - ".$location;
+			}
+			?>
+			</p>
 
 			<p class="profile-blurb"><em><?php echo get_field('profile-blurb'); ?></em></p>
 
