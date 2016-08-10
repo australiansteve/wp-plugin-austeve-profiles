@@ -189,7 +189,7 @@ function austeve_profiles_shortcode_archive(){
 	ob_start();
     $args = array(
         'post_type' => 'austeve-profiles',
-        'post_status' => array('publish', 'pending'),
+        'post_status' => array('publish'),
         'meta_key'        => 'profile-lastname',
         'orderby'        => 'meta_value',
     	'order'          => 'ASC',
@@ -202,12 +202,7 @@ function austeve_profiles_shortcode_archive(){
         while( $query->have_posts() ){
             $query->the_post();
                        
-            if (get_post_status() == 'publish') {
-				include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');
-			}
-			else {
-				include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive-pending.php');
-			}		           
+            include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');		           
         }
     }
     echo '</div>';
@@ -249,27 +244,6 @@ function austeve_profiles_modify_post_title( $post_id )
 }
 
 add_action( 'acf/save_post' , 'austeve_profiles_modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
-
-function austeve_profiles_save_as_pending( $post_id ) {
-
-	//Return is it's not saving from the front end, or isn't a profile
-	if (is_admin() || get_post_type($post_id) != 'austeve-profiles'){
-		return $post_id;
-	}
-
-	//Otherwise, set the post status to draft & save!
-	
-	$args = array (
-		'ID' => $post_id,
-		'post_status' => 'pending',
-		);
-	wp_update_post($args);
-
-	return $post_id;
-}
-
-add_action( 'acf/pre_save_post' , 'austeve_profiles_save_as_pending' , 10, 1 ); 
-
 
 function update_post_title_with_new_username( $user_id, $old_user_data ) 
 {

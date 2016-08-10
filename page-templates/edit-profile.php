@@ -29,7 +29,7 @@
 				$args = array(
 					'numberposts'	=> 1,
 					'post_type'		=> 'austeve-profiles',
-					'post_status'	=> array ('publish', 'pending'),
+					'post_status'	=> array ('publish'),
 					'meta_key'		=> 'profile-user',
 					'meta_value'	=> ''.$current_user->ID
 				);
