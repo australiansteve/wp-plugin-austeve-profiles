@@ -19,14 +19,18 @@ class austeve_profiles_widget extends WP_Widget {
     // This is where the action happens
     public function widget( $args, $instance ) {
 
-    	$widgetOutput = "";
+    	$widgetOutput = "<div class='widget'>";
 
 		//New query to get current user profile
 		if ( is_user_logged_in() ) {
+
+    		$widgetOutput .= "<div class='widget-inner'>";
+    		$widgetOutput .= "<h3 class='widget-title m-has-ico'>";
+    		$widgetOutput .= "<i class='widget-ico fa fa-file-photo-o'></i>";
         	$widgetOutput .= apply_filters( 'widget_title', $instance['title'] );
+    		$widgetOutput .= "</h3>";
 
 		    $current_user = wp_get_current_user();
-		    $widgetOutput .= $current_user->first_name;
 
 			// args
 			$args = array(
@@ -56,8 +60,11 @@ class austeve_profiles_widget extends WP_Widget {
 			endif;
 
 			wp_reset_query();	 // Restore global post data stomped by the_post().
+    		
+    		$widgetOutput .= "</div>";
     	}
 
+    	$widgetOutput .= "</div>";
     	echo $widgetOutput;
 	}
         

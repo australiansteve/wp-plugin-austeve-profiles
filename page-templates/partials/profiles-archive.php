@@ -12,7 +12,11 @@
 	<div class="row">
 
 		<div class="col-xs-12 col-sm-3 profile-image">
-			<?php $image = get_field('profile-picture'); ?>
+			<?php 
+			//echo the_ID();
+			$image = get_field('profile-picture'); 
+			//var_dump($image);
+			?>
 
 			<?php if ($image) { ?>
 			<a href="<?php echo get_permalink(); ?>">
@@ -30,7 +34,7 @@
 			<a href="<?php echo get_permalink(); ?>">
 				<h2 class="profile-name">
 				<?php $user = get_field('profile-user'); 
-
+				//var_dump($user);
 				echo $user['user_firstname']." ".$user['user_lastname'];
 				?>
 				</h2>

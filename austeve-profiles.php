@@ -10,6 +10,7 @@
  */
 
 include( plugin_dir_path( __FILE__ ) . 'admin.php');
+include( plugin_dir_path( __FILE__ ) . 'shortcode.php');
 include( plugin_dir_path( __FILE__ ) . 'widget.php');
 include( plugin_dir_path( __FILE__ ) . 'AUSteveProfilesPageTemplater.php');
 
@@ -108,6 +109,19 @@ function austeve_create_profiles_post_type() {
 
 add_action( 'init', 'austeve_create_profiles_post_type', 0 );
 
+function austeve_profiles_rewrite_flush() {
+    // First, we "add" the custom post type via the above written function.
+    // Note: "add" is written with quotes, as CPTs don't get added to the DB,
+    // They are only referenced in the post_type column with a post entry, 
+    // when you add a post of this CPT.
+    austeve_create_profiles_post_type();
+
+    // ATTENTION: This is *only* done during plugin activation hook in this example!
+    // You should *NEVER EVER* do this on every page load!!
+    flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'austeve_profiles_rewrite_flush' );
+
 function profile_include_template_function( $template_path ) {
     if ( get_post_type() == 'austeve-profiles' ) {
         if ( is_single() ) {
@@ -183,33 +197,60 @@ function austeve_profiles_entry_footer() {
 }
 endif;
 
-add_shortcode( 'member_directory', 'austeve_profiles_shortcode_archive' );
+function austeve_profiles_pre_get_posts_archive($query) {
 
-function austeve_profiles_shortcode_archive(){
-	ob_start();
-    $args = array(
-        'post_type' => 'austeve-profiles',
-        'post_status' => array('publish'),
-        'meta_key'        => 'profile-lastname',
-        'orderby'        => 'meta_value',
-    	'order'          => 'ASC',
-		'posts_per_page' => -1
-    );
+	//Bail early if is admin or not the profiles archive
+	if (is_admin() || !is_post_type_archive('austeve-profiles'))
+	{
+		return;
+	}
 
-    echo '<div class="row archive-container">';
-    $query = new WP_Query( $args );
-    if( $query->have_posts() ){
-        while( $query->have_posts() ){
-            $query->the_post();
-                       
-            include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');		           
-        }
+	if( isset($query->query_vars['post_type']) && $query->query_vars['post_type'] == 'austeve-profiles' ) {
+	    // Display profiles in lastname order, max of 20 per page
+        $query->set( 'posts_per_page', 1 );
+        $query->set( 'meta_key', 'profile-lastname' );
+        $query->set( 'orderby', 'meta_value' );
+        $query->set( 'order', 'ASC' );
+
+
+		// get meta query
+		$meta_query = $query->get('meta_query');
+
+		
+		// loop over filters
+		foreach( $GLOBALS['my_query_filters'] as $key => $name ) {
+			
+			// continue if not found in url
+			if( empty($_GET[ $name ]) ) {
+				
+				continue;
+				
+			}
+			
+			
+			// get the value for this filter
+			// eg: http://www.website.com/events?city=melbourne,sydney
+			$value = explode(',', $_GET[ $name ]);
+			
+			
+			// append meta query
+	    	$meta_query[] = array(
+	            'meta_key'		=> $name,
+	            'meta_value'		=> $value,
+	            'meta_compare'	=> 'LIKE',
+	        );
+	        
+		} 
+		
+		
+		// update meta query
+		$query->set('meta_query', $meta_query);
+
+        return;
     }
-    echo '</div>';
-    
-    wp_reset_postdata();
-    return ob_get_clean();
+
 }
+add_action( 'pre_get_posts', 'austeve_profiles_pre_get_posts_archive', 1 );
 
 function austeve_profiles_modify_post_title( $post_id )
 {

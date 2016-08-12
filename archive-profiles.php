@@ -16,22 +16,7 @@ get_header(); ?>
 		<div id="primary" class="content-area">
 			<div id="content" class="site-content" role="main">
 
-			<?php 
-			//Modify query to include Published and Pending profiles. Only display the latest Published revision though
-			// args
-			$args = array(
-		        'post_type' => 'austeve-profiles',
-		        'post_status' => array('publish', 'pending'),
-		        'meta_key'        => 'profile-lastname',
-		        'orderby'        => 'meta_value',
-		    	'order'          => 'ASC',
-				'posts_per_page' => -1
-			);
-
-			// query
-			$the_query = new WP_Query( $args );
-
-			if ( $the_query->have_posts() ) : ?>
+			<?php if ( have_posts() ) : ?>
 
 				<header class="page-header">
 					<?php
@@ -41,37 +26,106 @@ get_header(); ?>
 				</header><!-- .page-header -->
 
 				<div class="row">
+				<div id="archive-filters">
+<?php foreach( $GLOBALS['my_query_filters'] as $key => $name ): 
+	
+	// get the field's settings without attempting to load a value
+	$field = get_field_object($key, false, false);
+	
+	
+	// set value if available
+	if( isset($_GET[ $name ]) ) {
+		
+		$field['value'] = explode(',', $_GET[ $name ]);
+		
+	}
+	
+	
+	// create filter
+	?>
+	<div class="filter" data-filter="<?php echo $name; ?>">
+		<?php create_field( $field ); ?>
+	</div>
+	
+<?php endforeach; ?>
+</div>
+
+<script type="text/javascript">
+(function($) {
+	
+	// change
+	$('#archive-filters').on('change', 'input[type="checkbox"]', function(){
+
+		// vars
+		var url = '<?php echo home_url('property'); ?>';
+			args = {};
+			
+		
+		// loop over filters
+		$('#archive-filters .filter').each(function(){
+			
+			// vars
+			var filter = $(this).data('filter'),
+				vals = [];
+			
+			
+			// find checked inputs
+			$(this).find('input:checked').each(function(){
+	
+				vals.push( $(this).val() );
+	
+			});
+			
+		
+			// append to args
+			args[ filter ] = vals.join(',');
+			
+		});
 				
-					<?php /* Start the Loop */ 
+		// update url
+		url += '?';
+				
+		// loop over args
+		$.each(args, function( name, value ){
+			
+			url += name + '=' + value + '&';
+			
+		});
+				
+		// remove last &
+		url = url.slice(0, -1);
+			
+		// reload page
+		window.location.replace( url );
+	});
+})(jQuery);
+</script>
+				</div>
+				<?php /* Start the Loop */ ?>
+				<?php while ( have_posts() ) : the_post(); ?>
 
-					while( $the_query->have_posts() ) : $the_query->the_post(); 
-
-						if (get_post_status() == 'publish') {
-
-							include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');
-
-						}
-						else {
-
-							include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive-pending.php');
-
-						}							
-					endwhile; 
-
+					<?php
+						/* Include the Post-Format-specific template for the content.
+						 * If you want to override this in a child theme, then include a file
+						 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
+						 */
+						//get_template_part( 'components/content', get_post_format() );
+						include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');
 					?>
 
-				</div> <!-- .row-->
+				<?php endwhile; ?>
 
-				<?php the_posts_navigation(); ?>
+				<?php the_posts_navigation(array(
+		            'prev_text'          => __( 'Next page' ),
+		            'next_text'          => __( 'Previous page' ),
+		            'screen_reader_text' => __( 'Profiles navigation' ),
+		        )); ?>
 
 			<?php else : ?>
 
-				<?php get_template_part( 'page-templates/partials/content', 'none' ); ?>
+				<?php get_template_part( 'components/content', 'none' ); ?>
 
-			<?php endif; 
-
-			wp_reset_query();
-			?>
+			<?php endif; ?>
 
 			</div><!-- #content -->
 			
