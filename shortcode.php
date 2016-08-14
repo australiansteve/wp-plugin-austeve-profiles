@@ -28,7 +28,7 @@ function austeve_profiles_shortcode_archive(){
         );		
 	}
 
-	//var_dump($meta_query);
+	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
     $args = array(
         'post_type' => 'austeve-profiles',
@@ -37,15 +37,17 @@ function austeve_profiles_shortcode_archive(){
         'orderby'        => 'meta_value',
     	'order'          => 'ASC',
 		'posts_per_page' => 20,
+		'paged' 		=> $paged,
 		'meta_query' => $meta_query
     );
+    //var_dump($args);
     $query = new WP_Query( $args );
 
 ?>
 	<div class="row">
 		<div class="col-sm-12">
-			<form method="GET" action="?profile-name=y" id="member-filters" onsubmit="return validateSearch()">
-				<input type="text" class="filter" data-filter="member-name" placeholder="Search by name" value="<?php echo (isset($_GET['member-name']) ? $_GET['member-name'] : ''); ?>" />
+			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
+				<input id="name-filter" type="text" class="filter" data-filter="member-name" placeholder="Search by name" value="<?php echo (isset($_GET['member-name']) ? $_GET['member-name'] : ''); ?>" />
 				<input type="submit" value="Search"/>
 			</form>
 		</div>
@@ -59,6 +61,20 @@ function austeve_profiles_shortcode_archive(){
                        
             include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');		           
         }
+
+		if ($query->max_num_pages > 1) { // check if the max number of pages is greater than 1  
+?>
+		  <nav class="prev-next-posts navigation">
+		    <div class="prev-posts-link page-nav">
+		      <?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
+		    </div>
+		    <div class="next-posts-link page-nav">
+		      <?php echo get_next_posts_link( 'Next page <i class="fa fa-arrow-right" aria-hidden="true"></i>', $query->max_num_pages ); ?>
+		    </div>		    
+		  </nav>
+<?php 
+				
+		} 
     }
     echo '</div>';
 ?>
