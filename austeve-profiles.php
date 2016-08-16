@@ -207,7 +207,7 @@ function austeve_profiles_pre_get_posts_archive($query) {
 
 	if( isset($query->query_vars['post_type']) && $query->query_vars['post_type'] == 'austeve-profiles' ) {
 	    // Display profiles in lastname order, max of 20 per page
-        $query->set( 'posts_per_page', 1 );
+        $query->set( 'posts_per_page', 10 );
         $query->set( 'meta_key', 'profile-lastname' );
         $query->set( 'orderby', 'meta_value' );
         $query->set( 'order', 'ASC' );
@@ -261,6 +261,7 @@ function austeve_profiles_modify_post_title( $post_id )
 	$user = get_field('profile-user', $post_id);
 	$userfirstname = "";
 	$userlastname = "";
+	//var_dump($user);
 	//If user field is not set in the profile, grab the current logged in user
 	if (!$user)
 	{

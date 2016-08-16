@@ -36,7 +36,7 @@ function austeve_profiles_shortcode_archive(){
         'meta_key'        => 'profile-lastname',
         'orderby'        => 'meta_value',
     	'order'          => 'ASC',
-		'posts_per_page' => 20,
+		'posts_per_page' => 10,
 		'paged' 		=> $paged,
 		'meta_query' => $meta_query
     );
@@ -53,30 +53,65 @@ function austeve_profiles_shortcode_archive(){
 		</div>
 	</div>
 <?php
-    echo '<div class="row archive-container">';
 	
     if( $query->have_posts() ){
+
+?>
+		<div class="row nav-info">
+		  	<div class="col-xs-12">
+		  		<em>Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
+		  	</div>
+	  	</div>
+<?php
+    	//Navigation before list
+		if ($query->max_num_pages > 1) { // check if the max number of pages is greater than 1  
+?>
+	  	<div class="row navigation">		  	
+		  	<div class="col-xs-12">
+		  		<nav class="prev-next-posts">
+	    			<div class="prev-posts-link page-nav">
+		      			<?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
+		    		</div>
+		    		<div class="next-posts-link page-nav">
+		      			<?php echo get_next_posts_link( 'Next page <i class="fa fa-arrow-right" aria-hidden="true"></i>', $query->max_num_pages ); ?>
+		    		</div>		    
+		  		</nav>
+		  	</div>
+	  	</div>
+<?php 
+				
+		} 
+
+    	echo '<div class="row archive-container">';
+
+		//loop over query results
         while( $query->have_posts() ){
             $query->the_post();
                        
             include( plugin_dir_path( __FILE__ ) . 'page-templates/partials/profiles-archive.php');		           
         }
 
+    	echo '</div>';
+
+    	//Navigation after list
 		if ($query->max_num_pages > 1) { // check if the max number of pages is greater than 1  
 ?>
-		  <nav class="prev-next-posts navigation">
-		    <div class="prev-posts-link page-nav">
-		      <?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
-		    </div>
-		    <div class="next-posts-link page-nav">
-		      <?php echo get_next_posts_link( 'Next page <i class="fa fa-arrow-right" aria-hidden="true"></i>', $query->max_num_pages ); ?>
-		    </div>		    
-		  </nav>
+	  	<div class="row navigation">
+		  	<div class="col-xs-12">
+		  		<nav class="prev-next-posts">
+		    		<div class="prev-posts-link page-nav">
+		      			<?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
+		    		</div>
+		    		<div class="next-posts-link page-nav">
+		      			<?php echo get_next_posts_link( 'Next page <i class="fa fa-arrow-right" aria-hidden="true"></i>', $query->max_num_pages ); ?>
+		    		</div>		    
+		  		</nav>
+		  	</div>
+	  	</div>
 <?php 
 				
 		} 
     }
-    echo '</div>';
 ?>
 <script type="text/javascript">
 

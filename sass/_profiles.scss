@@ -1,5 +1,7 @@
-.archive-container {
+.archive-container.row {
 	margin-bottom: 2rem;
+	margin-left: 0;
+	margin-right: 0;
 	font-size: 0.9rem;
 	
 	p { 
@@ -34,19 +36,6 @@
 
 	p.profile-view-link {
 		text-align: right;
-	}
-
-	.page-nav {
-		display: inline-block;
-		width: 49%;
-	}
-
-	.next-posts-link {
-		text-align: right;
-	}
-
-	.prev-posts-link {
-		text-align: left;
 	}
 
 }
@@ -95,15 +84,26 @@ article.austeve-profiles {
 	    border-top: 10px solid transparent;
 	    border-top-color: rgba(0,0,0,0.8);
 	}
+
+	div.portfolio-work {
+		margin-bottom: 2rem;
+	}
+
+	h3 {
+		margin-top: 3rem;
+	}
 }
 
 .edit-profile-page {
 
-	max-width: 700px;
-	margin: auto;
 	margin-bottom: 2rem;
 	padding-bottom: 1rem;
 	background-color: rgba(255, 255, 255, 0.5);
+
+	div.acf-field:not(.fullwidth) {
+		max-width: 700px;
+		margin: auto;
+	}
 
 	.row {
 		padding: 1rem 0.75rem;
@@ -152,13 +152,64 @@ article.austeve-profiles {
 		text-align: center;
 		margin: 2rem 0 2rem 0;
 	}
+
+	a:hover {
+		cursor: pointer;
+	}
+
+	th {
+		text-transform: none;
+		font-weight: bold;
+
+		p.description {
+			font-weight: normal;
+			color: #b1a9bb;
+		}
+	}
+
+	.acf-repeater td.acf-row-handle span::before {
+		content: "Piece #";
+	}
 }
 
 #member-filters {
 	text-align: center;
-	margin-bottom: 2rem;
+	margin-bottom: 3rem;
 }
 
 #name-filter {
 	max-width: 65%;
+}
+
+.navigation {
+
+	margin: 1rem 0 1rem 0;
+	font-size: 0.9rem;
+	
+	a {
+		color: #000;		
+	}
+
+	nav {
+		margin: 1rem 0 3rem 0;
+	}
+
+	.page-nav {
+		display: inline-block;
+		width: 49%;
+	}
+
+	.next-posts-link {
+		text-align: right;
+	}
+
+	.prev-posts-link {
+		text-align: left;
+	}
+
+}
+
+.nav-info {
+	text-align: right;
+	font-size: 0.9rem;
 }

@@ -1,14 +1,14 @@
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) { 
 	
-	.archive-container {
+	.archive-container.row {
 
 		h2.profile-name {
 			text-align: left;
 		}
 
 		.profile-archive-item {
-	    	min-height: 8rem;
+	    	min-height: 10rem;
 		}
 
 		.profile-image {

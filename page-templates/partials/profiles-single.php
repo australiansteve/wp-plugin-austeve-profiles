@@ -113,6 +113,35 @@
 			?>
 		</div>
 
+		<div class="row profile-portfolio">
+			<?php $portfolio = get_field('profile-portfolio'); 
+			if ($portfolio)
+			{
+				echo "<h2>Portfolio</h2>";
+				//var_dump($portfolio);
+				foreach ($portfolio as $piece) {
+										
+					echo "<div class='portfolio-work'>";
+					if ($piece['title']) {					
+						echo "<h3 class='work-title'>".$piece['title']."</h3>";	
+					}
+					if ($piece['description']) {					
+						echo "<p class='work-description'>".$piece['description']."</p>";	
+					}		
+					if ($piece['image']) {					
+						echo "<img class='work-image' src='".$piece['image']['url']."'/>";	
+					}
+					if ($piece['audiovideo']) {
+						echo "<span class='work-av'>";
+						echo $piece['audiovideo'];
+						echo "</span>";
+					}
+					echo "</div>";	
+				}
+			}
+			?>
+		</div>
+
 		<?php
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'austeve-profiles' ),

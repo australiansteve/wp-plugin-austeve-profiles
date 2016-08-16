@@ -40,11 +40,12 @@
 				if( $the_query->have_posts() ): 
 					while( $the_query->have_posts() ) : $the_query->the_post();
 						
+						$message = "Changes saved. <p><a href='".get_permalink()."' target='blank'>View profile</a></p>";
 		            	acf_form(array(
 							'post_id'	=> get_the_ID(),
 							'post_title'	=> false,
 							'submit_value'	=> 'Update Profile',
-							'updated_message' => __('Changes saved successfully. <p>ALL changes must be reviewed by an administrator before they are made public.<br/> You can continue making changes until it is reviewed, and all changes will be reviewed at once.', 'austeve-profiles'),
+							'updated_message' => __($message, 'austeve-profiles'),
 							'fields' => array ( 'profile-picture',
 								'profile-location', 
 								'profile-mediums', 
@@ -54,7 +55,8 @@
 								'profile-facebook', 
 								'profile-twitter',
 								'profile-instagram',
-								'profile-tumblr'
+								'profile-tumblr',
+								'profile-portfolio'
 								),
 						));
 
@@ -85,17 +87,19 @@
 				<?php
 					$slug = str_replace(' ', '-', $current_user->user_firstname." ".$current_user->user_lastname);
 
+					$message = "Profile saved successfully. <p><a href='".home_url()."' target='blank'>Return home to view your profile</a></p>";
+
 	            	acf_form(array(
 						'post_id'	=> 'new_post',
 						'post_title'	=> false,
 						'new_post' => array(
 							'post_type'		=> 'austeve-profiles',
-							'post_status'	=> 'pending',
+							'post_status'	=> 'publish',
 							'post_title' => $current_user->user_firstname." ".$current_user->user_lastname, 
 							'post_name' => $slug
 							),
 						'submit_value'	=> 'Create Profile',
-						'updated_message' => __('Profile saved successfully. <p>ALL profiles must be reviewed by an administrator before they are made public.<br/> You can continue making changes until it is reviewed, any/all changes will be reviewed at once.', 'austeve-profiles'),
+						'updated_message' => __($message, 'austeve-profiles'),
 						'fields' => array ( 'profile-picture',
 							'profile-location', 
 							'profile-mediums', 
@@ -105,7 +109,8 @@
 							'profile-facebook', 
 							'profile-twitter',
 							'profile-instagram',
-							'profile-tumblr'
+							'profile-tumblr',
+							'profile-portfolio'
 							),
 					));
 
