@@ -22,7 +22,7 @@ class austeve_profiles_widget extends WP_Widget {
     	$widgetOutput = "<div class='widget'>";
 
 		//New query to get current user profile
-		if ( is_user_logged_in() ) {
+		if ( is_user_logged_in() && current_user_can('subscriber') ) {
 
     		$widgetOutput .= "<div class='widget-inner'>";
     		$widgetOutput .= "<h3 class='widget-title m-has-ico'>";

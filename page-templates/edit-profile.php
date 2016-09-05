@@ -20,7 +20,7 @@
 
 			<?php 
 			//New query to get current user profile
-			if ( is_user_logged_in() ) {
+			if ( is_user_logged_in() && current_user_can('subscriber') ) {
 			    $current_user = wp_get_current_user();
 		        
 			    echo "<h1 class='entry-title'>".$current_user->user_firstname." ".$current_user->user_lastname."</h1>";
@@ -119,8 +119,8 @@
 				wp_reset_query();	 // Restore global post data stomped by the_post().
 
 			} else {
-			    echo "<h1>Login required</h1>";
-			    echo "<p>You are not logged in. <a href='".esc_url( wp_login_url() )."' alt='Login'>Log in now</a>";
+			    echo "<h1>Members only</h1>";
+			    echo "<p>Admins and the general public cannot view this page. <a href='".esc_url( wp_login_url() )."' alt='Login'>Log in as a member now</a>";
 			}
 
 			acf_enqueue_uploader();
