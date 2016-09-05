@@ -112,6 +112,15 @@ function austeve_profiles_shortcode_archive(){
 				
 		} 
     }
+    else {
+?>
+		<div class="row archive-container">
+		  	<div class="col-xs-12">
+		  		<em>No results found.</em>
+		  	</div>
+	  	</div>
+<?php	
+    }
 ?>
 <script type="text/javascript">
 
