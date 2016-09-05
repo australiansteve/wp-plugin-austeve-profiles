@@ -1,29 +1,29 @@
 <?php
 /* Shortcode file */
 
-// array of filters (field key => field name)
-$GLOBALS['my_query_filters'] = array( 
-	'First Name'	=> 'profile-firstname', 
-	'Last Name'	=> 'profile-lastname'
-);
-
 function austeve_profiles_shortcode_archive(){
 	ob_start();
 
 	$meta_query = array('relation' => 'OR');
 
 	//Build name filter
-	if( !empty($_GET[ 'member-name' ]) ) {			
+	if( !empty($_GET[ 'search-term' ]) ) {			
 		// append meta query
     	$meta_query[] = array(
             'key'		=> 'profile-firstname',
-            'value'		=> $_GET[ 'member-name' ],
+            'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );
         // append meta query
     	$meta_query[] = array(
             'key'		=> 'profile-lastname',
-            'value'		=> $_GET[ 'member-name' ],
+            'value'		=> $_GET[ 'search-term' ],
+            'compare'	=> 'LIKE',
+        );	
+        // append meta query
+    	$meta_query[] = array(
+            'key'		=> 'profile-location',
+            'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );		
 	}
@@ -47,7 +47,7 @@ function austeve_profiles_shortcode_archive(){
 	<div class="row">
 		<div class="col-sm-12">
 			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
-				<input id="name-filter" type="text" class="filter" data-filter="member-name" placeholder="Search by name" value="<?php echo (isset($_GET['member-name']) ? $_GET['member-name'] : ''); ?>" />
+				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by name or location" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
 			</form>
 		</div>
