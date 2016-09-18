@@ -261,7 +261,7 @@ function austeve_profiles_modify_post_title( $post_id )
 	$user = get_field('profile-user', $post_id);
 	$userfirstname = "";
 	$userlastname = "";
-	//var_dump($user);
+
 	//If user field is not set in the profile, grab the current logged in user
 	if (!$user)
 	{
@@ -270,8 +270,16 @@ function austeve_profiles_modify_post_title( $post_id )
 		$userfirstname = $user->user_firstname;
 		$userlastname = $user->user_lastname;
 	} 
-
-	else {
+	else if (is_numeric($user))
+	{
+		//Sometimes the user is returned as a number (the id)
+		$userobject = get_user_by('id', $user);
+		$userfirstname = $userobject->user_firstname;
+		$userlastname = $userobject->user_lastname;
+	}
+	else 
+	{
+		//Sometimes it's returned as an array
 		$userfirstname = $user['user_firstname'];
 		$userlastname = $user['user_lastname'];
 	}
