@@ -323,6 +323,8 @@ function update_post_title_with_new_username( $user_id, $old_user_data )
 					update_field('profile-lastname', $old_user_data->user_lastname);
 				}
 
+				austeve_profiles_modify_post_title(get_the_ID());
+
 			endwhile;
 	endif;
 
