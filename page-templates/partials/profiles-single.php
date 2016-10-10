@@ -120,28 +120,51 @@
 
 		<div class="row profile-portfolio">
 			<?php $portfolio = get_field('profile-portfolio'); 
+			
 			if ($portfolio)
 			{
 				echo "<h2>Portfolio</h2>";
-				//var_dump($portfolio);
-				foreach ($portfolio as $piece) {
+				foreach ($portfolio as $project) {
+
+					echo "<div class='portfolio-project'>";
 										
-					echo "<div class='portfolio-work'>";
-					if ($piece['title']) {					
-						echo "<h3 class='work-title'>".$piece['title']."</h3>";	
+					if (isset($project['title'])) {	
+						echo "<h3 class='project-title'>".$project['title']."</h3>";
 					}
-					if ($piece['description']) {					
-						echo "<p class='work-description'>".$piece['description']."</p>";	
+					if (isset($project['description'])) {					
+						echo "<span class='project-description'>".$project['description']."</span>";	
+					}	
+					if (isset($project['artwork'])) {					
+						echo "<div class='project-work'>";
+
+						foreach ($project['artwork'] as $piece) {
+
+							echo "<div class='project-piece'>";
+
+							if (isset($piece['image'])) {					
+								echo "<img class='work-image' src='".$piece['image']['url']."'/>";	
+							}
+							if (isset($piece['audiovideo'])) {
+								echo "<span class='work-av'>";
+								echo $piece['audiovideo'];
+								echo "</span>";
+							}
+							if (isset($piece['formatted-text'])) {
+								echo "<span class='work-text'>";
+								echo $piece['formatted-text'];
+								echo "</span>";
+							}
+							if (isset($piece['description'])) {
+								echo "<p class='work-description'>".$piece['description']."</p>";
+							}
+							echo "</div> <!-- .project-piece -->";
+						}
+
+						echo "</div>";	
 					}		
-					if ($piece['image']) {					
-						echo "<img class='work-image' src='".$piece['image']['url']."'/>";	
-					}
-					if ($piece['audiovideo']) {
-						echo "<span class='work-av'>";
-						echo $piece['audiovideo'];
-						echo "</span>";
-					}
-					echo "</div>";	
+					/**/
+
+					echo "</div> <!-- .portfolio-project-->";
 				}
 			}
 			?>

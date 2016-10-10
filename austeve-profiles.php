@@ -22,17 +22,17 @@ function austeve_create_profiles_post_type() {
 
 // Set UI labels for Custom Post Type
 	$labels = array(
-		'name'                => _x( 'Profiles', 'Post Type General Name', 'austeve-profiles' ),
-		'singular_name'       => _x( 'Profile', 'Post Type Singular Name', 'austeve-profiles' ),
-		'menu_name'           => __( 'Profiles', 'austeve-profiles' ),
-		'parent_item_colon'   => __( 'Parent Profile', 'austeve-profiles' ),
-		'all_items'           => __( 'All Profiles', 'austeve-profiles' ),
-		'view_item'           => __( 'View Profile', 'austeve-profiles' ),
-		'add_new_item'        => __( 'Add New Profile', 'austeve-profiles' ),
+		'name'                => _x( 'Portfolios', 'Post Type General Name', 'austeve-profiles' ),
+		'singular_name'       => _x( 'Portfolio', 'Post Type Singular Name', 'austeve-profiles' ),
+		'menu_name'           => __( 'Portfolios', 'austeve-profiles' ),
+		'parent_item_colon'   => __( 'Parent Portfolio:', 'austeve-profiles' ),
+		'all_items'           => __( 'All Portfolios', 'austeve-profiles' ),
+		'view_item'           => __( 'View Portfolio', 'austeve-profiles' ),
+		'add_new_item'        => __( 'Add New Portfolio', 'austeve-profiles' ),
 		'add_new'             => __( 'Add New', 'austeve-profiles' ),
-		'edit_item'           => __( 'Edit Profile', 'austeve-profiles' ),
-		'update_item'         => __( 'Update Profile', 'austeve-profiles' ),
-		'search_items'        => __( 'Search Profile', 'austeve-profiles' ),
+		'edit_item'           => __( 'Edit Portfolio', 'austeve-profiles' ),
+		'update_item'         => __( 'Update Portfolio', 'austeve-profiles' ),
+		'search_items'        => __( 'Search Portfolios', 'austeve-profiles' ),
 		'not_found'           => __( 'Not Found', 'austeve-profiles' ),
 		'not_found_in_trash'  => __( 'Not found in Trash', 'austeve-profiles' ),
 	);
@@ -40,8 +40,8 @@ function austeve_create_profiles_post_type() {
 // Set other options for Custom Post Type
 	
 	$args = array(
-		'label'               => __( 'Profiles', 'austeve-profiles' ),
-		'description'         => __( 'User profiles', 'austeve-profiles' ),
+		'label'               => __( 'Portfolios', 'austeve-profiles' ),
+		'description'         => __( 'User portfolios', 'austeve-profiles' ),
 		'labels'              => $labels,
 		// Features this CPT supports in Post Editor
 		'supports'            => array( 'author', 'revisions', ),
@@ -52,7 +52,7 @@ function austeve_create_profiles_post_type() {
 		* is like Posts.
 		*/	
 		'hierarchical'        => false,
-		'rewrite'           => array( 'slug' => 'profiles' ),
+		'rewrite'           => array( 'slug' => 'portfolios' ),
 		'public'              => true,
 		'show_ui'             => true,
 		'show_in_menu'        => true,
@@ -295,9 +295,9 @@ function austeve_profiles_modify_post_title( $post_id )
 
 add_action( 'acf/save_post' , 'austeve_profiles_modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
 
-function update_post_title_with_new_username( $user_id, $old_user_data ) 
+function update_post_title_with_new_username( $user_id, $new_user_data ) 
 {
-	error_log("User ".$user_id." updated. ".$old_user_data->user_firstname." ".$old_user_data->user_lastname );
+	error_log("User ".$user_id." updated. ".$new_user_data->user_firstname." ".$new_user_data->user_lastname );
 
 	// args
 	$args = array(
@@ -313,14 +313,14 @@ function update_post_title_with_new_username( $user_id, $old_user_data )
 	if( $the_query->have_posts() ):
 			while( $the_query->have_posts() ) : $the_query->the_post();
 
-				if ($old_user_data->user_firstname !== get_field('profile-firstname'))
+				if ($new_user_data->user_firstname !== get_field('profile-firstname'))
 				{
-					update_field('profile-firstname', $old_user_data->user_firstname);
+					update_field('profile-firstname', $new_user_data->user_firstname);
 				}
 
-				if ($old_user_data->user_lastname !== get_field('profile-lastname'))
+				if ($new_user_data->user_lastname !== get_field('profile-lastname'))
 				{
-					update_field('profile-lastname', $old_user_data->user_lastname);
+					update_field('profile-lastname', $new_user_data->user_lastname);
 				}
 
 				austeve_profiles_modify_post_title(get_the_ID());

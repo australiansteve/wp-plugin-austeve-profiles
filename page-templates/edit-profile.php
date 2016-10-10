@@ -20,7 +20,7 @@
 
 			<?php 
 			//New query to get current user profile
-			if ( is_user_logged_in() && current_user_can('subscriber') ) {
+			if ( is_user_logged_in() ) {
 			    $current_user = wp_get_current_user();
 		        
 			    echo "<h1 class='entry-title'>".$current_user->user_firstname." ".$current_user->user_lastname."</h1>";
@@ -40,11 +40,11 @@
 				if( $the_query->have_posts() ): 
 					while( $the_query->have_posts() ) : $the_query->the_post();
 						
-						$message = "Changes saved. <p><a href='".get_permalink()."' target='blank'>View profile</a></p>";
+						$message = "Changes saved. <p><a href='".get_permalink()."' target='blank'>View portfolio</a></p>";
 		            	acf_form(array(
 							'post_id'	=> get_the_ID(),
 							'post_title'	=> false,
-							'submit_value'	=> 'Update Profile',
+							'submit_value'	=> 'Update Portfolio',
 							'updated_message' => __($message, 'austeve-profiles'),
 							'fields' => array ( 'profile-picture',
 								'profile-location', 
@@ -83,11 +83,11 @@
 					
 					?>
 
-				<p>Create your new profile below</p>
+				<p>Create your new portfolio below</p>
 				<?php
 					$slug = str_replace(' ', '-', $current_user->user_firstname." ".$current_user->user_lastname);
 
-					$message = "Profile saved successfully. <p><a href='".home_url()."' target='blank'>Return home to view your profile</a></p>";
+					$message = "Portfolio saved successfully. <p><a href='".home_url()."' target='blank'>Return home to view your portfolio</a></p>";
 
 	            	acf_form(array(
 						'post_id'	=> 'new_post',
@@ -98,7 +98,7 @@
 							'post_title' => $current_user->user_firstname." ".$current_user->user_lastname, 
 							'post_name' => $slug
 							),
-						'submit_value'	=> 'Create Profile',
+						'submit_value'	=> 'Create Portfolio',
 						'updated_message' => __($message, 'austeve-profiles'),
 						'fields' => array ( 'profile-picture',
 							'profile-location', 
@@ -120,7 +120,7 @@
 
 			} else {
 			    echo "<h1>Members only</h1>";
-			    echo "<p>Admins and the general public cannot view this page. <a href='".esc_url( wp_login_url() )."' alt='Login'>Log in as a member now</a>";
+			    echo "<p>Only members can view this page. <a href='".esc_url( wp_login_url() )."' alt='Login'>Log in now</a>";
 			}
 
 			acf_enqueue_uploader();
