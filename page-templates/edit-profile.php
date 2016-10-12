@@ -25,6 +25,14 @@
 		        
 			    echo "<h1 class='entry-title'>".$current_user->user_firstname." ".$current_user->user_lastname."</h1>";
 
+			    //Echo help link
+		        if ( get_option('austeve_profile_help_page'))
+		        {
+				    echo "<div style='text-align: right; width: 100%'><a href='".get_permalink(get_option('austeve_profile_help_page'))."' target='blank' title='Portfolio help'>";
+				    echo "Help <i class='fa fa-question-circle' style='margin: 0 5px;' aria-hidden='true'></i>";
+				    echo "</a></div>";
+				}
+
 				// args
 				$args = array(
 					'numberposts'	=> 1,

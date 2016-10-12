@@ -28,7 +28,14 @@ class austeve_profiles_widget extends WP_Widget {
     		$widgetOutput .= "<h3 class='widget-title m-has-ico'>";
     		$widgetOutput .= "<i class='widget-ico fa fa-file-photo-o'></i>";
         	$widgetOutput .= apply_filters( 'widget_title', $instance['title'] );
-    		$widgetOutput .= "</h3>";
+
+            if ( isset($instance['helppage']))
+            {
+                $widgetOutput .= "<span style='float:right'><a href='".get_permalink($instance['helppage'])."' target='blank' title='Portfolio help'>";
+                $widgetOutput .= "<i class='fa fa-question-circle' aria-hidden='true'></i></a></span>";
+            }
+
+            $widgetOutput .= "</h3>";
 
 		    $current_user = wp_get_current_user();
 
@@ -60,7 +67,7 @@ class austeve_profiles_widget extends WP_Widget {
 			endif;
 
 			wp_reset_query();	 // Restore global post data stomped by the_post().
-    		
+
     		$widgetOutput .= "</div>";
     	}
 
@@ -76,11 +83,17 @@ class austeve_profiles_widget extends WP_Widget {
         else {
             $title = __( 'Portfolio', 'austeve_profiles_widget_domain' );
         }
-		if ( isset( $instance[ 'editprofilepage' ] ) ) {
+        if ( isset( $instance[ 'editprofilepage' ] ) ) {
             $editprofilepage = $instance[ 'editprofilepage' ];
         }
         else {
             $editprofilepage = __( 'Edit profile page', 'austeve_profiles_widget_domain' );
+        }
+        if ( isset( $instance[ 'helppage' ] ) ) {
+            $helppage = $instance[ 'helppage' ];
+        }
+        else {
+            $helppage = __( 'Help page', 'austeve_profiles_widget_domain' );
         }
 
         // Widget admin form
@@ -100,6 +113,17 @@ class austeve_profiles_widget extends WP_Widget {
         ));
         ?>
         </p>
+
+        <p>
+        <label for="<?php echo $this->get_field_id( 'helppage' ); ?>"><?php _e( 'Help page: ' ); ?></label> 
+        <?php
+            wp_dropdown_pages(array(
+            'id' => $this->get_field_id('helppage'),
+            'name' => $this->get_field_name('helppage'),
+            'selected' => isset($instance['helppage']) ? $instance['helppage'] : ''
+        ));
+        ?>
+        </p>
 <?php 
     }
         
@@ -108,6 +132,9 @@ class austeve_profiles_widget extends WP_Widget {
         $instance = array();
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
         $instance['editprofilepage'] = ( ! empty( $new_instance['editprofilepage'] ) ) ? strip_tags( $new_instance['editprofilepage'] ) : '';
+        $instance['helppage'] = ( ! empty( $new_instance['helppage'] ) ) ? strip_tags( $new_instance['helppage'] ) : '';
+
+        update_option("austeve_profile_help_page", $instance['helppage']);
         return $instance;
     }
 } // Class austeve_profiles_widget ends here

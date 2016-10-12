@@ -3,7 +3,7 @@
  * Plugin Name: Profiles - ArtsLink NB
  * Plugin URI: https://github.com/australiansteve/wp-plugin-austeve-profiles
  * Description: Add, edit & display user profiles
- * Version: 0.0.1
+ * Version: 1.0.0
  * Author: AustralianSteve
  * Author URI: http://AustralianSteve.com
  * License: GPL2
