@@ -7,7 +7,7 @@
  * @package AUSteve Projects
  */
 ?>
-<div class="row profile-archive-item">
+<div class="row columns profile-archive-item">
 
 	<div class="row">
 
@@ -17,7 +17,7 @@
 			$image = get_field('profile-picture'); 
 			//var_dump($image);
 			?>
-			
+
 			
 			<a href="<?php echo get_permalink(); ?>">
 			<?php if ($image) { ?>

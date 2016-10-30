@@ -13,7 +13,7 @@
 
 <div class="row"><!-- .row start -->
 
-	<div class="col-sm-12"><!-- .col-sm-12 start -->
+	<div class="columns small-12"><!-- .col-sm-12 start -->
 
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content edit-profile-page" role="main">
@@ -119,7 +119,7 @@
 		</div><!-- #content -->
 	</div><!-- #primary -->
 
-	</div><!-- .col-sm-12 end -->
+	</div><!-- .columns small-12 end -->
 
 </div><!-- .row end -->
 

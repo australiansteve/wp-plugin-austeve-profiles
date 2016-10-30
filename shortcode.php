@@ -39,7 +39,7 @@ function austeve_profiles_shortcode_archive(){
 
 ?>
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="small-12 columns">
 			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
 				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by Dipster name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
@@ -76,7 +76,7 @@ function austeve_profiles_shortcode_archive(){
 				
 		} 
 
-    	echo '<div class="row archive-container">';
+    	echo '<div class="row columns archive-container">';
 
 		//loop over query results
         while( $query->have_posts() ){

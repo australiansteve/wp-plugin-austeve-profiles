@@ -165,6 +165,12 @@ function austeve_profiles_entry_footer() {
 }
 endif;
 
+// array of filters (field key => field name)
+$GLOBALS['my_query_filters'] = array( 
+	'field_1'	=> 'firstname', 
+	'field_2'	=> 'lastname'
+);
+
 function austeve_profiles_pre_get_posts_archive($query) {
 
 	//Bail early if is admin or not the profiles archive
@@ -176,7 +182,7 @@ function austeve_profiles_pre_get_posts_archive($query) {
 	if( isset($query->query_vars['post_type']) && $query->query_vars['post_type'] == 'austeve-profiles' ) {
 	    // Display profiles in lastname order, max of 20 per page
         $query->set( 'posts_per_page', 10 );
-        $query->set( 'meta_key', 'profile-lastname' );
+        $query->set( 'meta_key', 'lastname' );
         $query->set( 'orderby', 'meta_value' );
         $query->set( 'order', 'ASC' );
 
@@ -226,7 +232,7 @@ function austeve_profiles_modify_post_title( $post_id )
 		return;
 	}
 
-	$user = get_field('profile-user', $post_id);
+	$user = get_field('user', $post_id);
 	$userfirstname = "";
 	$userlastname = "";
 
@@ -234,7 +240,7 @@ function austeve_profiles_modify_post_title( $post_id )
 	if (!$user)
 	{
 		$user = wp_get_current_user();
-		update_field( 'profile-user', get_current_user_id(),  $post_id );
+		update_field( 'user', get_current_user_id(),  $post_id );
 		$userfirstname = $user->user_firstname;
 		$userlastname = $user->user_lastname;
 	} 
@@ -252,8 +258,8 @@ function austeve_profiles_modify_post_title( $post_id )
 		$userlastname = $user['user_lastname'];
 	}
 
-	update_field( 'profile-firstname', $userfirstname,  $post_id );
-	update_field( 'profile-lastname', $userlastname,  $post_id );
+	update_field( 'firstname', $userfirstname,  $post_id );
+	update_field( 'lastname', $userlastname,  $post_id );
 	
 	remove_action( 'acf/save_post', 'modify_post_title' , 50);
 	$slug = str_replace(' ', '-', $userfirstname." ".$userlastname);
@@ -271,7 +277,7 @@ function update_post_title_with_new_username( $user_id, $new_user_data )
 	$args = array(
 		'numberposts'	=> -1,
 		'post_type'		=> 'austeve-profiles',
-		'meta_key'		=> 'profile-user',
+		'meta_key'		=> 'user',
 		'meta_value'	=> $user_id
 	);
 
@@ -281,14 +287,14 @@ function update_post_title_with_new_username( $user_id, $new_user_data )
 	if( $the_query->have_posts() ):
 			while( $the_query->have_posts() ) : $the_query->the_post();
 
-				if ($new_user_data->user_firstname !== get_field('profile-firstname'))
+				if ($new_user_data->user_firstname !== get_field('firstname'))
 				{
-					update_field('profile-firstname', $new_user_data->user_firstname);
+					update_field('firstname', $new_user_data->user_firstname);
 				}
 
-				if ($new_user_data->user_lastname !== get_field('profile-lastname'))
+				if ($new_user_data->user_lastname !== get_field('lastname'))
 				{
-					update_field('profile-lastname', $new_user_data->user_lastname);
+					update_field('lastname', $new_user_data->user_lastname);
 				}
 
 				austeve_profiles_modify_post_title(get_the_ID());
