@@ -10,22 +10,16 @@ function austeve_profiles_shortcode_archive(){
 	if( !empty($_GET[ 'search-term' ]) ) {			
 		// append meta query
     	$meta_query[] = array(
-            'key'		=> 'profile-firstname',
+            'key'		=> 'firstname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );
         // append meta query
     	$meta_query[] = array(
-            'key'		=> 'profile-lastname',
+            'key'		=> 'lastname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
-        );	
-        // append meta query
-    	$meta_query[] = array(
-            'key'		=> 'profile-location',
-            'value'		=> $_GET[ 'search-term' ],
-            'compare'	=> 'LIKE',
-        );		
+        );
 	}
 
 	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
@@ -33,7 +27,7 @@ function austeve_profiles_shortcode_archive(){
     $args = array(
         'post_type' => 'austeve-profiles',
         'post_status' => array('publish'),
-        'meta_key'        => 'profile-lastname',
+        'meta_key'        => 'lastname',
         'orderby'        => 'meta_value',
     	'order'          => 'ASC',
 		'posts_per_page' => 10,
@@ -47,7 +41,7 @@ function austeve_profiles_shortcode_archive(){
 	<div class="row">
 		<div class="col-sm-12">
 			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
-				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by name or location" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
+				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by Dipster name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
 			</form>
 		</div>
@@ -58,7 +52,7 @@ function austeve_profiles_shortcode_archive(){
 
 ?>
 		<div class="row nav-info">
-		  	<div class="col-xs-12">
+		  	<div class="columns small-12">
 		  		<em>Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
 		  	</div>
 	  	</div>
@@ -67,7 +61,7 @@ function austeve_profiles_shortcode_archive(){
 		if ($query->max_num_pages > 1) { // check if the max number of pages is greater than 1  
 ?>
 	  	<div class="row navigation">		  	
-		  	<div class="col-xs-12">
+		  	<div class="columns small-12">
 		  		<nav class="prev-next-posts">
 	    			<div class="prev-posts-link page-nav">
 		      			<?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
@@ -97,7 +91,7 @@ function austeve_profiles_shortcode_archive(){
 		if ($query->max_num_pages > 1) { // check if the max number of pages is greater than 1  
 ?>
 	  	<div class="row navigation">
-		  	<div class="col-xs-12">
+		  	<div class="columns small-12">
 		  		<nav class="prev-next-posts">
 		    		<div class="prev-posts-link page-nav">
 		      			<?php echo get_previous_posts_link( '<i class="fa fa-arrow-left" aria-hidden="true"></i> Previous page' ); ?>
@@ -115,7 +109,7 @@ function austeve_profiles_shortcode_archive(){
     else {
 ?>
 		<div class="row archive-container">
-		  	<div class="col-xs-12">
+		  	<div class="columns small-12">
 		  		<em>No results found.</em>
 		  	</div>
 	  	</div>
@@ -165,6 +159,6 @@ function validateSearch() {
     return ob_get_clean();
 }
 
-add_shortcode( 'member_directory', 'austeve_profiles_shortcode_archive' );
+add_shortcode( 'dipster_list', 'austeve_profiles_shortcode_archive' );
 
 ?>

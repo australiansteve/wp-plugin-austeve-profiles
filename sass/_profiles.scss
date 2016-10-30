@@ -57,10 +57,6 @@ article.austeve-profiles {
 		padding-bottom: 1rem;
 	}
 
-	div.profile-social a {
-		margin: 0 0.5rem;
-	}
-
 	h1.entry-title {
 		background-color: rgba(0,0,0,0.8);
     	color: #FFF;
@@ -84,28 +80,6 @@ article.austeve-profiles {
 	    border-top: 10px solid transparent;
 	    border-top-color: rgba(0,0,0,0.8);
 	}
-
-	.portfolio-project {
-	    margin-bottom: 3rem;
-	}
-
-	h3.project-title {
-	    margin-bottom: 0.8rem;
-	}
-
-	.portfolio-project .project-description p {
-	    margin-bottom: 1rem;
-	}
-
-	p.work-description {
-	    font-size: 0.9rem;
-	    font-style: italic;
-	    margin-top: 0.35rem;
-	}
-
-	span.work-av iframe {
-	    margin-bottom: 0;
-	}	
 }
 
 .edit-profile-page {
@@ -179,10 +153,6 @@ article.austeve-profiles {
 			font-weight: normal;
 			color: #b1a9bb;
 		}
-	}
-
-	.acf-repeater td.acf-row-handle span::before {
-		content: "Project #";
 	}
 
 	ul.acf-actions {

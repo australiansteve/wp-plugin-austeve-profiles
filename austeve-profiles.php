@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Profiles - ArtsLink NB
+ * Plugin Name: Profiles - Dipsters
  * Plugin URI: https://github.com/australiansteve/wp-plugin-austeve-profiles
  * Description: Add, edit & display user profiles
  * Version: 1.0.0
@@ -22,17 +22,17 @@ function austeve_create_profiles_post_type() {
 
 // Set UI labels for Custom Post Type
 	$labels = array(
-		'name'                => _x( 'Portfolios', 'Post Type General Name', 'austeve-profiles' ),
-		'singular_name'       => _x( 'Portfolio', 'Post Type Singular Name', 'austeve-profiles' ),
-		'menu_name'           => __( 'Portfolios', 'austeve-profiles' ),
-		'parent_item_colon'   => __( 'Parent Portfolio:', 'austeve-profiles' ),
-		'all_items'           => __( 'All Portfolios', 'austeve-profiles' ),
-		'view_item'           => __( 'View Portfolio', 'austeve-profiles' ),
-		'add_new_item'        => __( 'Add New Portfolio', 'austeve-profiles' ),
+		'name'                => _x( 'Dipster Profiles', 'Post Type General Name', 'austeve-profiles' ),
+		'singular_name'       => _x( 'Dipster Profile', 'Post Type Singular Name', 'austeve-profiles' ),
+		'menu_name'           => __( 'Dipster Profiles', 'austeve-profiles' ),
+		'parent_item_colon'   => __( 'Parent Dipster Profile:', 'austeve-profiles' ),
+		'all_items'           => __( 'All Dipster Profiles', 'austeve-profiles' ),
+		'view_item'           => __( 'View Dipster Profile', 'austeve-profiles' ),
+		'add_new_item'        => __( 'Add New Dipster Profile', 'austeve-profiles' ),
 		'add_new'             => __( 'Add New', 'austeve-profiles' ),
-		'edit_item'           => __( 'Edit Portfolio', 'austeve-profiles' ),
-		'update_item'         => __( 'Update Portfolio', 'austeve-profiles' ),
-		'search_items'        => __( 'Search Portfolios', 'austeve-profiles' ),
+		'edit_item'           => __( 'Edit Dipster Profile', 'austeve-profiles' ),
+		'update_item'         => __( 'Update Dipster Profile', 'austeve-profiles' ),
+		'search_items'        => __( 'Search Dipster Profiles', 'austeve-profiles' ),
 		'not_found'           => __( 'Not Found', 'austeve-profiles' ),
 		'not_found_in_trash'  => __( 'Not found in Trash', 'austeve-profiles' ),
 	);
@@ -40,8 +40,8 @@ function austeve_create_profiles_post_type() {
 // Set other options for Custom Post Type
 	
 	$args = array(
-		'label'               => __( 'Portfolios', 'austeve-profiles' ),
-		'description'         => __( 'User portfolios', 'austeve-profiles' ),
+		'label'               => __( 'Dipster Profiles', 'austeve-profiles' ),
+		'description'         => __( 'Dipster Profiles', 'austeve-profiles' ),
 		'labels'              => $labels,
 		// Features this CPT supports in Post Editor
 		'supports'            => array( 'author', 'revisions', ),
@@ -52,7 +52,7 @@ function austeve_create_profiles_post_type() {
 		* is like Posts.
 		*/	
 		'hierarchical'        => false,
-		'rewrite'           => array( 'slug' => 'portfolios' ),
+		'rewrite'           => array( 'slug' => 'dipsters' ),
 		'public'              => true,
 		'show_ui'             => true,
 		'show_in_menu'        => true,
@@ -68,38 +68,6 @@ function austeve_create_profiles_post_type() {
 	
 	// Registering your Custom Post Type
 	register_post_type( 'austeve-profiles', $args );
-
-	$taxonomyLabels = array(
-		'name'              => _x( 'Mediums', 'taxonomy general name' ),
-		'singular_name'     => _x( 'Medium', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search Mediums' ),
-		'all_items'         => __( 'All Mediums' ),
-		'parent_item'       => __( 'Parent Medium' ),
-		'parent_item_colon' => __( 'Parent Parent:' ),
-		'edit_item'         => __( 'Edit Medium' ),
-		'update_item'       => __( 'Update Medium' ),
-		'add_new_item'      => __( 'Add New Medium' ),
-		'new_item_name'     => __( 'New Medium' ),
-		'menu_name'         => __( 'Mediums' ),
-	);
-
-	$taxonomyArgs = array(
-
-		'label'               => __( 'austeve_mediums', 'austeve-profiles' ),
-		'labels'              => $taxonomyLabels,
-		'show_admin_column'	=> false,
-		'hierarchical' 		=> false,
-		'rewrite'           => array( 'slug' => 'medium' ),
-		'capabilities'		=> array(
-							    'manage_terms' => 'manage_categories',
-							    'edit_terms' => 'manage_categories',
-							    'delete_terms' => 'manage_categories',
-							    'assign_terms' => 'edit_posts'
-							 )
-		);
-
-	register_taxonomy( 'austeve_mediums', 'austeve-profiles', $taxonomyArgs );
-
 }
 
 /* Hook into the 'init' action so that the function

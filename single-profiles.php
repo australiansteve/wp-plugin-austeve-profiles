@@ -12,7 +12,7 @@
 
 <div class="row"><!-- .row start -->
 
-	<div class="col-sm-12"><!-- .col-sm-12 start -->
+	<div class="columns small-12"><!-- .columns small-12 start -->
 
 		<div id="primary" class="content-area">
 
@@ -38,7 +38,7 @@
 
 		</div><!-- #primary -->
 
-	</div><!-- .col-sm-12 end -->
+	</div><!-- .columns small-12 end -->
 
 </div><!-- .row end -->
 

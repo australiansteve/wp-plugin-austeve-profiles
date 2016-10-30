@@ -10,12 +10,12 @@
 
 <article>
 	<header class="entry-header">
-		<h1 class="entry-title">No portfolios</h1>
+		<h1 class="entry-title">No profiles</h1>
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
 
-		<p>No portfolios match your search criteria
+		<p>No profiles match your search criteria
 
 	</div><!-- .entry-content -->
 

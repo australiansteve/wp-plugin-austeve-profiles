@@ -7,29 +7,30 @@
  * @package AUSteve Projects
  */
 ?>
-<div class="col-xs-12 col-sm-6 col-md-12 profile-archive-item">
+<div class="row profile-archive-item">
 
 	<div class="row">
 
-		<div class="col-xs-12 col-sm-3 profile-image">
+		<div class="columns small-12 medium-3 profile-image">
 			<?php 
 			//echo the_ID();
 			$image = get_field('profile-picture'); 
 			//var_dump($image);
 			?>
-
-			<?php if ($image) { ?>
+			
+			
 			<a href="<?php echo get_permalink(); ?>">
+			<?php if ($image) { ?>
 				<img src='<?php echo $image['sizes']['thumbnail'] ?>'/>
-			</a>
 			<?php } else  { ?>
 			<!-- Display placeholder image -->
 			<img src='<?php echo plugin_dir_url( __FILE__ ).'../../assets/dist/images/profile-placeholder.png'; ?>' alt='Profile picture' height='150px' width='150px'/>
 			<?php } ?>
+			</a>
 
 		</div>
 
-		<div class="col-xs-12 col-sm-9">
+		<div class="columns small-12 medium-9">
 
 			<a href="<?php echo get_permalink(); ?>">
 				<h2 class="profile-name">
@@ -48,31 +49,15 @@
 				</h2>
 			</a>
 
-			<p class="profile-membership-type"><?php 
-			$field = get_field_object('profile-membership_type');
-			$value = get_field('profile-membership_type');
-			$label = $field['choices'][ $value ];
-
-			echo $label;
-			
-			$location = get_field('profile-location');
-
-			if ($location)
-			{
-				echo " - ".$location;
-			}
-			?>
-			</p>
-
-			<p class="profile-blurb"><em><?php echo get_field('profile-blurb'); ?></em></p>
+			<p class="profile-about"><em><?php echo get_field('about'); ?></em></p>
 
 		</div>
 
 	</div>
 
 	<div class="row">
-		<div class="col-xs-12">
-			<p class="profile-view-link"><a href="<?php echo get_permalink(); ?>">View portfolio <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></p>
+		<div class="columns small-12">
+			<p class="profile-view-link"><a href="<?php echo get_permalink(); ?>">View profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></p>
 		</div>
 	</div>
 

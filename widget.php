@@ -11,7 +11,7 @@ class austeve_profiles_widget extends WP_Widget {
         __('AUSteve Profile Widget', 'austeve_profiles_widget_domain'), 
 
         // Widget description
-        array( 'description' => __( 'Display links to a member profile', 'austeve_profiles_widget_domain' ), ) 
+        array( 'description' => __( 'Display links to a Dipster profile', 'austeve_profiles_widget_domain' ), ) 
         );
     }
 
@@ -31,7 +31,7 @@ class austeve_profiles_widget extends WP_Widget {
 
             if ( isset($instance['helppage']))
             {
-                $widgetOutput .= "<span style='float:right'><a href='".get_permalink($instance['helppage'])."' target='blank' title='Portfolio help'>";
+                $widgetOutput .= "<span style='float:right'><a href='".get_permalink($instance['helppage'])."' target='blank' title='Profile help'>";
                 $widgetOutput .= "<i class='fa fa-question-circle' aria-hidden='true'></i></a></span>";
             }
 
