@@ -121,7 +121,7 @@ function austeve_profiles_shortcode_archive(){
 function validateSearch() {
 
 		// vars
-		var url = '<?php echo home_url('members'); ?>';
+		var url = '<?php echo home_url('dipsters'); ?>';
 		var args = {};			
 		
 		// loop over filters

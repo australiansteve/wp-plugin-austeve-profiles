@@ -54,18 +54,9 @@
 							'post_title'	=> false,
 							'submit_value'	=> 'Update Profile',
 							'updated_message' => __($message, 'austeve-profiles'),
-							/*'fields' => array ( 'profile-picture',
-								'profile-location', 
-								'profile-mediums', 
-								'profile-blurb', 
-								'profile-about', 
-								'profile-website', 
-								'profile-facebook', 
-								'profile-twitter',
-								'profile-instagram',
-								'profile-tumblr',
-								'profile-portfolio'
-								),*/
+							'fields' => array ( 'picture',
+									'about'
+								),
 						));
 
 					endwhile; 
@@ -90,18 +81,9 @@
 							),
 						'submit_value'	=> 'Create Portfolio',
 						'updated_message' => __($message, 'austeve-profiles'),
-						/*'fields' => array ( 'profile-picture',
-							'profile-location', 
-							'profile-mediums', 
-							'profile-blurb', 
-							'profile-about', 
-							'profile-website', 
-							'profile-facebook', 
-							'profile-twitter',
-							'profile-instagram',
-							'profile-tumblr',
-							'profile-portfolio'
-							),*/
+						'fields' => array ( 'picture',
+								'about'
+							),
 					));
 
 				endif; 

@@ -34,6 +34,12 @@
 			?>
 		</div>
 
+		<?php echo do_shortcode('[give_form id="33" show_title="false" show_goal="false" display_style="reveal" float_labels="enabled"]'); ?>
+
+		<script>
+			$("#user_donation").val = <?php get_field('user'); ?>
+		</script>
+
 		<?php
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'austeve-profiles' ),
