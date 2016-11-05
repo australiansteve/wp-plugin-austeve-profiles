@@ -38,7 +38,7 @@
 					'numberposts'	=> 1,
 					'post_type'		=> 'austeve-profiles',
 					'post_status'	=> array ('publish'),
-					'meta_key'		=> 'profile-user',
+					'meta_key'		=> 'user',
 					'meta_value'	=> ''.$current_user->ID
 				);
 
@@ -55,7 +55,8 @@
 							'submit_value'	=> 'Update Profile',
 							'updated_message' => __($message, 'austeve-profiles'),
 							'fields' => array ( 'picture',
-									'about'
+									'about',
+									'goal'
 								),
 						));
 
@@ -82,7 +83,8 @@
 						'submit_value'	=> 'Create Portfolio',
 						'updated_message' => __($message, 'austeve-profiles'),
 						'fields' => array ( 'picture',
-								'about'
+								'about',
+								'goal'
 							),
 					));
 

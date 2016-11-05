@@ -6,6 +6,9 @@
  * 
  * @package AUSteve Profiles
  */
+
+require_once('wp-config.php');
+
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -34,10 +37,65 @@
 			?>
 		</div>
 
-		<?php echo do_shortcode('[give_form id="33" show_title="false" show_goal="false" display_style="reveal" float_labels="enabled"]'); ?>
+		<?php 
+		$userGoal = get_field('goal'); 
+		$amountRaised = 0;
+
+		if ($userGoal > 0) 
+		{
+			//Formalate URL for getting all donations
+			$giveDonationsURL = site_url( '/give-api/donations/?key='.GIVE_KEY.'&token='.GIVE_TOKEN.'&number=-1', 'http' );
+			
+			$donationArgs = array(
+				'timeout'     => 30
+				);
+
+			$response = wp_remote_get( $giveDonationsURL, $donationArgs );
+
+			//If it doesn't time out
+			if( is_array($response) ) {
+
+				$header = $response['headers']; // array of http header lines
+				$body = $response['body']; // use the content
+
+				$results = json_decode( $body , true );
+				//var_dump($results);
+
+				foreach( $results['donations'] as $donation)
+				{
+					//var_dump($donation);
+					if (array_key_exists('user_donation', $donation['payment_meta']) && $donation['payment_meta']['user_donation'] == get_field('user')['ID'])
+					{
+						$amountRaised += intval($donation['total']);
+					}
+				}
+			}
+			
+		?>
+		<div class="give-goal-progress">
+            <div class="raised">
+            	<span class="income">$<?php echo number_format($amountRaised,2,".",","); ?></span> of <span class="goal-text">$<?php echo number_format($userGoal,2,".",","); ?></span> raised        
+            </div>
+    
+            <div class="give-progress-bar">
+	            <span style="width: 18%;background-color:#2bc253"></span>
+	        </div><!-- /.give-progress-bar -->
+		</div>
+		<?php
+		}
+		?>
+
+		<?php echo do_shortcode('[give_form id="'.GIVE_FORM.'" show_title="false" show_goal="false" display_style="reveal" float_labels="enabled"]'); ?>
 
 		<script>
-			$("#user_donation").val = <?php get_field('user'); ?>
+
+			//Half a second after page loads populate the hidden field with the user id
+			setTimeout(function() {
+				jQuery("#user_donation").each(function() {
+						jQuery(this).attr("value", "<?php echo get_field('user')['ID']; ?>");
+					}); 
+			}, 500);
+			
 		</script>
 
 		<?php
