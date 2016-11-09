@@ -20,19 +20,9 @@
 
 			<?php 
 			//New query to get current user profile
-			if ( is_user_logged_in() ) {
+			if ( is_user_logged_in() && current_user_can('mepr-active','rule: '.MEPR_REGISTERED_RULE) ) {
 			    $current_user = wp_get_current_user();
 		        
-			    echo "<h1 class='entry-title'>".$current_user->user_firstname." ".$current_user->user_lastname."</h1>";
-
-			    //Echo help link
-		        if ( get_option('austeve_profile_help_page'))
-		        {
-				    echo "<div style='text-align: right; width: 100%'><a href='".get_permalink(get_option('austeve_profile_help_page'))."' target='blank' title='Profile help'>";
-				    echo "Help <i class='fa fa-question-circle' style='margin: 0 5px;' aria-hidden='true'></i>";
-				    echo "</a></div>";
-				}
-
 				// args
 				$args = array(
 					'numberposts'	=> 1,
@@ -46,6 +36,17 @@
 				$the_query = new WP_Query( $args );
 
 				if( $the_query->have_posts() ): 
+
+				    echo "<h1 class='entry-title'>".$current_user->user_firstname." ".$current_user->user_lastname."</h1>";
+
+				    //Echo help link
+			        if ( get_option('austeve_profile_help_page'))
+			        {
+					    echo "<div style='text-align: right; width: 100%'><a href='".get_permalink(get_option('austeve_profile_help_page'))."' target='blank' title='Profile help'>";
+					    echo "Help <i class='fa fa-question-circle' style='margin: 0 5px;' aria-hidden='true'></i>";
+					    echo "</a></div>";
+					}
+
 					while( $the_query->have_posts() ) : $the_query->the_post();
 						
 						$message = "Changes saved. <p><a href='".get_permalink()."' target='blank'>View profile</a></p>";
@@ -55,6 +56,7 @@
 							'submit_value'	=> 'Update Profile',
 							'updated_message' => __($message, 'austeve-profiles'),
 							'fields' => array ( 'picture',
+									'blurb',
 									'about',
 									'goal'
 								),
@@ -65,9 +67,22 @@
 					
 					?>
 
-				<p>Create your new profile below</p>
 				<?php
 					$slug = str_replace(' ', '-', $current_user->user_firstname." ".$current_user->user_lastname);
+
+				?>
+				    <h1 class='entry-title'>Create a profile</h1>
+					<p>Create your new profile below</p>
+
+				<?php 
+				    //Echo help link
+			        if ( get_option('austeve_profile_help_page'))
+			        {
+					    echo "<div style='text-align: right; width: 100%'><a href='".get_permalink(get_option('austeve_profile_help_page'))."' target='blank' title='Profile help'>";
+					    echo "Help <i class='fa fa-question-circle' style='margin: 0 5px;' aria-hidden='true'></i>";
+					    echo "</a></div>";
+					}
+
 
 					$message = "Profile saved successfully. <p><a href='".home_url()."' target='blank'>Return home to view your profile</a></p>";
 
@@ -80,9 +95,10 @@
 							'post_title' => $current_user->user_firstname." ".$current_user->user_lastname, 
 							'post_name' => $slug
 							),
-						'submit_value'	=> 'Create Portfolio',
+						'submit_value'	=> 'Create Profile',
 						'updated_message' => __($message, 'austeve-profiles'),
 						'fields' => array ( 'picture',
+								'blurb',
 								'about',
 								'goal'
 							),
@@ -94,7 +110,15 @@
 
 			} else {
 			    echo "<h1>Dipsters only</h1>";
-			    echo "<p>Only registered dipsters can view this page. <a href='".esc_url( wp_login_url() )."' alt='Login'>Log in now</a>";
+			    echo "<p>Only registered dipsters can view this page. ";
+				
+				if ( is_user_logged_in() ) {
+					echo "<p><a href='".esc_url( site_url().'/register' )."' alt='Register'>Register for this years event now</a>";
+				}
+				else {
+					echo "<p><a href='".esc_url( site_url().'/register' )."' alt='Register'>Register</a> or <a href='".esc_url( wp_login_url() )."' alt='Login'>log in</a> now.";
+				}
+
 			}
 
 			acf_enqueue_uploader();

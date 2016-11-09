@@ -119,9 +119,12 @@ function austeve_profiles_shortcode_archive(){
 <script type="text/javascript">
 
 function validateSearch() {
-
+	<?php
+		global $wp;
+		$current_url = home_url(add_query_arg(array(),$wp->request));
+	?>
 		// vars
-		var url = '<?php echo home_url('dipsters'); ?>';
+		var url = '<?php echo $current_url; ?>';
 		var args = {};			
 		
 		// loop over filters

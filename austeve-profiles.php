@@ -3,7 +3,7 @@
  * Plugin Name: Profiles - Dipsters
  * Plugin URI: https://github.com/australiansteve/wp-plugin-austeve-profiles
  * Description: Add, edit & display user profiles
- * Version: 1.0.0
+ * Version: 2017.1.0.0
  * Author: AustralianSteve
  * Author URI: http://AustralianSteve.com
  * License: GPL2
