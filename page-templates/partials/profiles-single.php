@@ -106,9 +106,8 @@ require_once('wp-config.php');
 							}
 						}
 					}
-					
+				}
 				?>
-
 				<?php 
 				$current_user = wp_get_current_user();
 				if (get_field('user')['ID'] == $current_user->ID) 
@@ -121,12 +120,16 @@ require_once('wp-config.php');
 				<?php 
 				}
 				?>
-
+				
 			</div>
 
 			<div class="small-12 medium-6 columns">
 
-				<?php $percentage = round(($amountRaised / $userGoal) * 100); ?>
+				<?php 
+				if ($userGoal > 0) 
+				{
+					$percentage = round(($amountRaised / $userGoal) * 100); 
+				?>
 
 				<div class="give-goal-progress">
 		            <div class="raised">
@@ -137,7 +140,12 @@ require_once('wp-config.php');
 			            <span style="width: 0%;background-color:#2bc253"></span>
 			        </div><!-- /.give-progress-bar -->
 				</div>
-				<?php
+				
+				<?php 
+				}
+				else 
+				{
+					echo "<h2 style='text-align: left;'>Donate to ".get_field('user')['user_firstname']."</h2>";
 				}
 				?>
 

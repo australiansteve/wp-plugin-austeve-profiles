@@ -78,7 +78,7 @@ class austeve_profiles_widget extends WP_Widget {
             $widgetOutput .= "<h1 class='widget-title m-has-ico'>";
             $widgetOutput .= "Register";
             $widgetOutput .= "</h1>";
-            $widgetOutput .= "<p>Register for this years event</p>";
+            $widgetOutput .= "<p>Register for this year's event</p>";
             $widgetOutput .= "<p><a class='button' href='".get_permalink($instance['registerpage'])."'>";
             $widgetOutput .= "Register Now</a>";
 
