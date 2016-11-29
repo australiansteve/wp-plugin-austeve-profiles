@@ -78,13 +78,14 @@ require_once('wp-config.php');
 					//If it doesn't time out
 					if( is_array($response) ) {
 
+						//var_dump($response);
 						$header = $response['headers']; // array of http header lines
 						$body = $response['body']; // use the content
 
 						$results = json_decode( $body , true );
 						//var_dump($results);
 
-						if (array_key_exists('donations', $results))  
+						if (is_array( $results ) && array_key_exists('donations', $results))  
 						{
 							foreach( $results['donations'] as $donation)
 							{
@@ -92,6 +93,7 @@ require_once('wp-config.php');
 								if (array_key_exists('user_donation', $donation['payment_meta']) && $donation['payment_meta']['user_donation'] == get_field('user')['ID'])
 								{
 									$amountRaised += intval($donation['total']);
+									$dMessage = array_key_exists('donation_message', $donation['payment_meta']) ? $donation['payment_meta']['donation_message'] : "";
 
 									$displayDonations = true;
 									$donationsHTML .= "<div class='row donation'>";
@@ -99,7 +101,7 @@ require_once('wp-config.php');
 									$donationsHTML .= "</div>"; //end .columns
 									$donationsHTML .= "<div class='small-3 medium-2 columns'>".number_format($donation['total'],2,".",",");
 									$donationsHTML .= "</div>"; //end .columns
-									$donationsHTML .= "<div class='small-12 medium-6 columns'><em>".$donation['payment_meta']['donation_message']."</em>"; //Actually show message
+									$donationsHTML .= "<div class='small-12 medium-6 columns'><em>".$dMessage."</em>"; //Actually show message
 									$donationsHTML .= "</div>"; //end .columns
 									$donationsHTML .= "</div>"; //end .row
 								}
