@@ -34,13 +34,17 @@ gulp.task('styles', function() {
 //Our 'deploy' task which deploys on a local dev environment
 gulp.task('deploylocal', function() {
 
+	gulp.src('./images/**/*')
+		.pipe(gulp.dest('./assets/dist/images')) //Copy the images
+		.pipe(notify({ message: "✔︎ Images copied!"}));
+
 	var files = [
 		'assets/dist/**/*', 
 		'page-templates/**/*.php',
 		'*.php',
 		'*.css'];
 
-	var dest = '/var/www/html/theme-dev/wp-content/plugins/austeve-profiles';
+	var dest = 'C:/wamp/www/theme-dev/wp-content/plugins/austeve-profiles';
 
 	return gulp.src(files, {base:"."})
 	        .pipe(gulp.dest(dest));
