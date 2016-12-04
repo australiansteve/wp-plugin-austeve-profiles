@@ -7,7 +7,7 @@
  * @package AUSteve Projects
  */
 ?>
-<div class="row ">
+<div class="row">
 
 	<div class="small-12 columns profile-archive-item">
 
@@ -19,14 +19,13 @@
 				$image = get_field('picture'); 
 				//var_dump($image);
 				?>
-
-				
+			
 				<a href="<?php echo get_permalink(); ?>">
 				<?php if ($image) { ?>
 					<img src='<?php echo $image['sizes']['thumbnail'] ?>'/>
 				<?php } else  { ?>
 				<!-- Display placeholder image -->
-				<img src='<?php echo plugin_dir_url( __FILE__ ).'../../assets/dist/images/profile-placeholder.png'; ?>' alt='Profile picture' height='150px' width='150px'/>
+				<img src='<?php echo plugin_dir_url( __FILE__ ).'../../assets/dist/images/placeholder-person.jpg'; ?>' alt='Profile picture' height='150px' width='150px'/>
 				<?php } ?>
 				</a>
 

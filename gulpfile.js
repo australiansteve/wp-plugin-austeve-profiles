@@ -34,6 +34,10 @@ gulp.task('styles', function() {
 //Our 'deploy' task which deploys on a local dev environment
 gulp.task('deploylocal', function() {
 
+	gulp.src('./images/**/*')
+		.pipe(gulp.dest('./assets/dist/images')) //Copy the images
+		.pipe(notify({ message: "✔︎ Images copied!"}));
+
 	var files = [
 		'assets/dist/**/*', 
 		'page-templates/**/*.php',
