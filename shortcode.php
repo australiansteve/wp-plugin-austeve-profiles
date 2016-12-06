@@ -115,6 +115,17 @@ function austeve_profiles_shortcode_archive(){
 	  	</div>
 <?php	
     }
+
+global $wp;
+$home_url = home_url();
+$current_url = home_url(add_query_arg(array(),$wp->request));
+$afterhome = strlen($current_url) - strlen($home_url);
+$request_url = substr($current_url, -($afterhome-1));
+$paging = strrpos ( $request_url , "/page/" );
+if ($paging)
+{
+	$request_url = substr($request_url, 0, $paging);
+}
 ?>
 <script type="text/javascript">
 
@@ -124,7 +135,7 @@ function validateSearch() {
 		$current_url = home_url(add_query_arg(array(),$wp->request));
 	?>
 		// vars
-		var url = '<?php echo $current_url; ?>';
+		var url = "<?php echo home_url( $request_url ); ?>";
 		var args = {};			
 		
 		// loop over filters
