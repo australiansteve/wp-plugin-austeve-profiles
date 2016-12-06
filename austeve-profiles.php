@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Profiles - Dipsters
+ * Plugin Name: Profiles - AUSteve Custom Post Type
  * Plugin URI: https://github.com/australiansteve/wp-plugin-austeve-profiles
  * Description: Add, edit & display user profiles
  * Version: 1.0.0
@@ -22,17 +22,17 @@ function austeve_create_profiles_post_type() {
 
 // Set UI labels for Custom Post Type
 	$labels = array(
-		'name'                => _x( 'Dipster Profiles', 'Post Type General Name', 'austeve-profiles' ),
-		'singular_name'       => _x( 'Dipster Profile', 'Post Type Singular Name', 'austeve-profiles' ),
-		'menu_name'           => __( 'Dipster Profiles', 'austeve-profiles' ),
-		'parent_item_colon'   => __( 'Parent Dipster Profile:', 'austeve-profiles' ),
-		'all_items'           => __( 'All Dipster Profiles', 'austeve-profiles' ),
-		'view_item'           => __( 'View Dipster Profile', 'austeve-profiles' ),
-		'add_new_item'        => __( 'Add New Dipster Profile', 'austeve-profiles' ),
+		'name'                => _x( 'Profiles', 'Post Type General Name', 'austeve-profiles' ),
+		'singular_name'       => _x( 'Profile', 'Post Type Singular Name', 'austeve-profiles' ),
+		'menu_name'           => __( 'Profiles', 'austeve-profiles' ),
+		'parent_item_colon'   => __( 'Parent Profile:', 'austeve-profiles' ),
+		'all_items'           => __( 'All Profiles', 'austeve-profiles' ),
+		'view_item'           => __( 'View Profile', 'austeve-profiles' ),
+		'add_new_item'        => __( 'Add New Profile', 'austeve-profiles' ),
 		'add_new'             => __( 'Add New', 'austeve-profiles' ),
-		'edit_item'           => __( 'Edit Dipster Profile', 'austeve-profiles' ),
-		'update_item'         => __( 'Update Dipster Profile', 'austeve-profiles' ),
-		'search_items'        => __( 'Search Dipster Profiles', 'austeve-profiles' ),
+		'edit_item'           => __( 'Edit Profile', 'austeve-profiles' ),
+		'update_item'         => __( 'Update Profile', 'austeve-profiles' ),
+		'search_items'        => __( 'Search Profiles', 'austeve-profiles' ),
 		'not_found'           => __( 'Not Found', 'austeve-profiles' ),
 		'not_found_in_trash'  => __( 'Not found in Trash', 'austeve-profiles' ),
 	);
@@ -40,8 +40,8 @@ function austeve_create_profiles_post_type() {
 // Set other options for Custom Post Type
 	
 	$args = array(
-		'label'               => __( 'Dipster Profiles', 'austeve-profiles' ),
-		'description'         => __( 'Dipster Profiles', 'austeve-profiles' ),
+		'label'               => __( 'Profiles', 'austeve-profiles' ),
+		'description'         => __( 'Profiles', 'austeve-profiles' ),
 		'labels'              => $labels,
 		// Features this CPT supports in Post Editor
 		'supports'            => array( 'author', 'revisions', ),
@@ -52,7 +52,7 @@ function austeve_create_profiles_post_type() {
 		* is like Posts.
 		*/	
 		'hierarchical'        => false,
-		'rewrite'           => array( 'slug' => 'dipsters' ),
+		'rewrite'           => array( 'slug' => 'profiles' ),
 		'public'              => true,
 		'show_ui'             => true,
 		'show_in_menu'        => true,

@@ -41,7 +41,7 @@ function austeve_profiles_shortcode_archive(){
 	<div class="row">
 		<div class="small-12 columns">
 			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
-				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by Dipster name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
+				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
 			</form>
 		</div>
@@ -115,13 +115,24 @@ function austeve_profiles_shortcode_archive(){
 	  	</div>
 <?php	
     }
+
+global $wp;
+$home_url = home_url();
+$current_url = home_url(add_query_arg(array(),$wp->request));
+$afterhome = strlen($current_url) - strlen($home_url);
+$request_url = substr($current_url, -($afterhome-1));
+$paging = strrpos ( $request_url , "/page/" );
+if ($paging)
+{
+	$request_url = substr($request_url, 0, $paging);
+}
 ?>
 <script type="text/javascript">
 
 function validateSearch() {
 
 		// vars
-		var url = '<?php echo home_url('members'); ?>';
+		var url = "<?php echo home_url( $request_url ); ?>";
 		var args = {};			
 		
 		// loop over filters
@@ -159,6 +170,6 @@ function validateSearch() {
     return ob_get_clean();
 }
 
-add_shortcode( 'dipster_list', 'austeve_profiles_shortcode_archive' );
+add_shortcode( 'profile_list', 'austeve_profiles_shortcode_archive' );
 
 ?>
