@@ -41,7 +41,7 @@ function austeve_profiles_shortcode_archive(){
 	<div class="row">
 		<div class="small-12 columns">
 			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
-				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by Dipster name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
+				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by Dipster first name OR last name" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
 			</form>
 		</div>
@@ -53,7 +53,7 @@ function austeve_profiles_shortcode_archive(){
 ?>
 		<div class="row nav-info">
 		  	<div class="columns small-12">
-		  		<em>Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
+		  		<em><?php echo $query->found_posts; ?> Dipsters found. Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
 		  	</div>
 	  	</div>
 <?php
@@ -110,7 +110,7 @@ function austeve_profiles_shortcode_archive(){
 ?>
 		<div class="row archive-container">
 		  	<div class="columns small-12">
-		  		<em>No results found.</em>
+		  		<em>No dipsters found. Try searching by first name OR last name, but not both together.</em>
 		  	</div>
 	  	</div>
 <?php	
