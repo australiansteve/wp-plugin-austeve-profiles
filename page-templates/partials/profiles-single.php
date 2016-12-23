@@ -48,6 +48,12 @@ require_once('wp-config.php');
 					?>
 				</div>
 
+				<div class="row columns facebook-share">
+					<div class="fb-share-button" data-href="<?php echo home_url(); ?><?php echo $_SERVER['REQUEST_URI']; ?>" data-layout="button" data-size="large" data-mobile-iframe="true">
+						<a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode ( home_url().$_SERVER['REQUEST_URI'] ); ?>&amp;src=sdkpreparse">Share</a>
+					</div>
+				</div>
+
 				<?php 
 				$userGoal = get_field('goal'); 
 				$amountRaised = 0;
