@@ -74,7 +74,8 @@ require_once('wp-config.php');
 				{
 					//Formalate URL for getting all donations
 					$giveDonationsURL = site_url( '/give-api/donations/?key='.GIVE_KEY.'&token='.GIVE_TOKEN.'&number=-1', 'http' );
-					
+					//echo $giveDonationsURL;
+
 					$donationArgs = array(
 						'timeout'     => 30
 						);
@@ -97,13 +98,14 @@ require_once('wp-config.php');
 							{
 								//var_dump($donation);
 								if (array_key_exists('user_donation', $donation['payment_meta']) && $donation['payment_meta']['user_donation'] == get_field('user')['ID'])
-								{
+								{		
 									$amountRaised += intval($donation['total']);
 									$dMessage = array_key_exists('donation_message', $donation['payment_meta']) ? $donation['payment_meta']['donation_message'] : "";
+									$dName = (array_key_exists('donation_anon', $donation['payment_meta']) && $donation['payment_meta']['donation_anon'] == '1') ? '<i>Anonymous</i>' : $donation['name'];
 
 									$displayDonations = true;
 									$donationsHTML .= "<div class='row donation'>";
-									$donationsHTML .= "<div class='small-9 medium-4 columns'>".$donation['name'];
+									$donationsHTML .= "<div class='small-9 medium-4 columns'>".$dName;
 									$donationsHTML .= "</div>"; //end .columns
 									$donationsHTML .= "<div class='small-3 medium-2 columns'>".number_format($donation['total'],2,".",",");
 									$donationsHTML .= "</div>"; //end .columns
