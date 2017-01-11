@@ -1,32 +1,76 @@
 <?php
 /* Shortcode file */
+$filterSet = false;
 
 function austeve_profiles_shortcode_archive(){
 	ob_start();
 
-	$meta_query = array('relation' => 'OR');
+	$meta_query = array('relation' => 'AND');
 
 	//Build name filter
-	if( !empty($_GET[ 'search-term' ]) ) {			
+	if( !empty($_GET[ 'search-term' ]) ) {
+
+		$search_term_query = array('relation' => 'OR');
+
 		// append meta query
-    	$meta_query[] = array(
+    	$search_term_query[] = array(
             'key'		=> 'profile-firstname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );
         // append meta query
-    	$meta_query[] = array(
+    	$search_term_query[] = array(
             'key'		=> 'profile-lastname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );	
         // append meta query
-    	$meta_query[] = array(
+    	$search_term_query[] = array(
             'key'		=> 'profile-location',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
-        );		
+        );
+
+    	//Add to the meta_query
+        $meta_query[] = $search_term_query;	
+        $filterSet = true;
 	}
+
+	//Build starts-with filter
+	if( !empty($_GET[ 'starts-with' ]) ) {
+
+		$starts_with_query = array('relation' => 'OR');
+
+		// append meta query
+    	$starts_with_query[] = array(
+            'key'		=> 'profile-firstname',
+            'value'		=> '^'.$_GET[ 'starts-with' ],
+            'compare'	=> 'REGEXP',
+        );
+        // append meta query
+    	$starts_with_query[] = array(
+            'key'		=> 'profile-lastname',
+            'value'		=> '^'.$_GET[ 'starts-with' ],
+            'compare'	=> 'REGEXP',
+        );
+
+    	//Add to the meta_query
+        $meta_query[] = $starts_with_query;	
+        $filterSet = true;
+	}
+
+	//Build profile-type filter
+	if( !empty($_GET[ 'profile-type' ]) ) {
+
+		// append meta query
+    	$meta_query[] = array(
+            'key'		=> 'profile-membership_type',
+            'value'		=> $_GET[ 'profile-type' ],
+            'compare'	=> '=',
+        );
+        $filterSet = true;
+	}
+	//error_log(print_r($meta_query, true));
 
 	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
@@ -44,14 +88,54 @@ function austeve_profiles_shortcode_archive(){
     $query = new WP_Query( $args );
 
 ?>
-	<div class="row">
-		<div class="col-sm-12">
-			<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
+	<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
+		<div class="row">
+			<div class="col-sm-12">
 				<input id="name-filter" type="text" class="filter" data-filter="search-term" placeholder="Search by name or location" value="<?php echo (isset($_GET['search-term']) ? $_GET['search-term'] : ''); ?>" />
 				<input type="submit" value="Search"/>
-			</form>
+
+			</div>
+
+			<div class="col-sm-12 filter-group">
+				<select id="name-starts-with-filter" class="filter" data-filter="starts-with" onchange="return validateSearch()">
+				<?php
+					//Output the empty value
+					echo "<option value='' ".((!isset($_GET['starts-with']) || ($_GET['starts-with'] === '')) ? 'selected' : '').">---- Name starting with ----</option>";
+
+					$alphabet = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z';
+					$letters = explode(' ', $alphabet);
+
+					foreach ($letters as $letter)
+					{
+						echo "<option value='$letter' ".((isset($_GET['starts-with']) && ($_GET['starts-with'] === $letter)) ? 'selected' : '').">$letter</option>";
+					}
+				?>
+				</select>
+				<select id="profile-type-filter" class="filter" data-filter="profile-type" onchange="return validateSearch()">
+				<?php
+					//Output the empty value
+					echo "<option value='' ".((!isset($_GET['profile-type']) || ($_GET['profile-type'] === '')) ? 'selected' : '').">---- Membership type ----</option>";
+
+					$profile_types = array('professional'=>'Professional', 
+						'student'=>'Emerging Artist', 
+						'friend'=>'Friend of the arts', 
+						'organization'=>'Organization'
+					);
+
+					foreach ($profile_types as $index => $value)
+					{
+						echo "<option value='$index' ".((isset($_GET['profile-type']) && ($_GET['profile-type'] === $index)) ? 'selected' : '').">$value</option>";
+					}
+				?>
+				</select>
+			</div>
+			<?php if ($filterSet) { ?>
+			<div class="col-sm-12 filter-group">
+				<input id="clear-filters" type="submit" onclick="return clearFilters()" value="Clear all filters"/>
+			</div>
+			<?php } ?>
 		</div>
-	</div>
+	</form>
 <?php
 	
     if( $query->have_posts() ){
@@ -142,6 +226,8 @@ function validateSearch() {
 		var url = '<?php echo home_url( $request_url ); ?>';
 		var args = {};			
 		
+		jQuery('#member-filters').append('<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i><span class="sr-only">Loading...</span>');
+
 		// loop over filters
 		jQuery('#member-filters .filter').each(function(){
 			
@@ -171,6 +257,19 @@ function validateSearch() {
 		window.location.replace( url );		
 		return false;
 }
+
+function clearFilters() {
+
+		// vars
+		var url = '<?php echo home_url( $request_url ); ?>';		
+		
+		jQuery('#member-filters').append('<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i><span class="sr-only">Loading...</span>');
+				
+		// reload page
+		window.location.replace( url );		
+		return false;
+}
+
 </script>
 <?php
     wp_reset_postdata();

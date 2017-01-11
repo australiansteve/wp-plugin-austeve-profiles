@@ -26,4 +26,13 @@
 		}
 
 	}
+
+	#member-filters .filter-group select, #member-filters .filter-group #clear-filters {
+	    max-width: 45%;
+	    margin-top: 1rem;
+	}
+
+	#profile-type-filter{
+		margin-left: 1rem;
+	}
 }
