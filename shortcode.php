@@ -53,7 +53,7 @@ function austeve_profiles_shortcode_archive(){
 ?>
 		<div class="row nav-info">
 		  	<div class="columns small-12">
-		  		<em>Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
+		  		<em><?php echo $query->found_posts; ?> profiles found. Showing page <?php echo $paged;?> of <?php echo $query->max_num_pages; ?></em>
 		  	</div>
 	  	</div>
 <?php
