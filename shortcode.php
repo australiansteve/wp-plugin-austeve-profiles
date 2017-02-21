@@ -5,34 +5,69 @@ $filterSet = false;
 function austeve_profiles_shortcode_archive(){
 	ob_start();
 
+	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+    $args = array(
+        'post_type' => 'austeve-profiles',
+        'post_status' => array('publish'),
+        'meta_key'        => 'profile-lastname',
+        'orderby'        => 'meta_value',
+    	'order'          => 'ASC',
+		'posts_per_page' => 10,
+		'paged' 		=> $paged,
+    );
+
 	$meta_query = array('relation' => 'AND');
+	$partial_match_meta_query = array('relation' => 'AND');
 
 	//Build name filter
 	if( !empty($_GET[ 'search-term' ]) ) {
 
-		$search_term_query = array('relation' => 'OR');
+		//First time through we just search by post name. If no results are found we will search again with the search_term_query
+		$args['name'] = $_GET[ 'search-term' ];
 
+		//Whole name matcher - Used later if no results found for first query
+		$search_term_query = array('relation' => 'OR');
 		// append meta query
     	$search_term_query[] = array(
+            'key'		=> 'profile-firstname',
+            'value'		=> explode(' ', $_GET[ 'search-term' ]),
+            'compare'	=> 'IN',
+        );
+        // append meta query
+    	$search_term_query[] = array(
+            'key'		=> 'profile-lastname',
+            'value'		=> explode(' ', $_GET[ 'search-term' ]),
+            'compare'	=> 'IN',
+        );	
+        // append meta query
+    	$search_term_query[] = array(
+            'key'		=> 'profile-location',
+            'value'		=> explode(' ', $_GET[ 'search-term' ]),
+            'compare'	=> 'IN',
+        );
+
+		//Partial name matcher - used later if no results found for second query
+		$partial_search_term_query = array('relation' => 'OR');
+		// append meta query
+    	$partial_search_term_query[] = array(
             'key'		=> 'profile-firstname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );
         // append meta query
-    	$search_term_query[] = array(
+    	$partial_search_term_query[] = array(
             'key'		=> 'profile-lastname',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );	
         // append meta query
-    	$search_term_query[] = array(
+    	$partial_search_term_query[] = array(
             'key'		=> 'profile-location',
             'value'		=> $_GET[ 'search-term' ],
             'compare'	=> 'LIKE',
         );
 
-    	//Add to the meta_query
-        $meta_query[] = $search_term_query;	
         $filterSet = true;
 	}
 
@@ -62,30 +97,55 @@ function austeve_profiles_shortcode_archive(){
 	//Build profile-type filter
 	if( !empty($_GET[ 'profile-type' ]) ) {
 
-		// append meta query
-    	$meta_query[] = array(
+		$profile_type_query = array(
             'key'		=> 'profile-membership_type',
             'value'		=> $_GET[ 'profile-type' ],
             'compare'	=> '=',
         );
+
+		// append meta query
+    	$meta_query[] = $profile_type_query;
         $filterSet = true;
 	}
-	//error_log(print_r($meta_query, true));
 
-	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+	$args['meta_query'] = $meta_query;
 
-    $args = array(
-        'post_type' => 'austeve-profiles',
-        'post_status' => array('publish'),
-        'meta_key'        => 'profile-lastname',
-        'orderby'        => 'meta_value',
-    	'order'          => 'ASC',
-		'posts_per_page' => 10,
-		'paged' 		=> $paged,
-		'meta_query' => $meta_query
-    );
-    //var_dump($args);
+	error_log("First time around: ".print_r($args, true));
+
     $query = new WP_Query( $args );
+
+    if ( !$query->have_posts() && !empty($_GET[ 'search-term' ]))
+    {
+    	//Results empty.
+    	//Search again using search_term_query
+		unset($args['name']);
+		unset($args['meta_query']);
+
+		$meta_query[] = $search_term_query;
+		$args['meta_query'] = $meta_query;
+
+		error_log("Second time around: ".print_r($args, true));
+    	$query = new WP_Query( $args );
+
+	    if ( !$query->have_posts() )
+	    {
+	    	//Results empty.
+	    	//Search again using search_term_query
+			unset($args['meta_query']);
+
+			$partial_match_meta_query[] = $partial_search_term_query;
+
+        	if( !empty($_GET[ 'starts-with' ]) )
+        		$partial_match_meta_query[] = $starts_with_query;	
+    		if( !empty($_GET[ 'profile-type' ]) )
+    			$partial_match_meta_query[] = $profile_type_query;
+
+			$args['meta_query'] = $partial_match_meta_query;
+
+			error_log("Third time around: ".print_r($args, true));
+    		$query = new WP_Query( $args );
+		}
+    }
 
 ?>
 	<form method="GET" action="#" id="member-filters" onsubmit="return validateSearch()">
@@ -129,7 +189,7 @@ function austeve_profiles_shortcode_archive(){
 				?>
 				</select>
 			</div>
-			<?php if ($filterSet) { ?>
+			<?php if (isset($filterSet)) { ?>
 			<div class="col-sm-12 filter-group">
 				<input id="clear-filters" type="submit" onclick="return clearFilters()" value="Clear all filters"/>
 			</div>
