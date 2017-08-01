@@ -210,6 +210,23 @@ article.austeve-profiles {
     margin-top: 1rem;
 }
 
+#member-filters .filter-mediums {
+	text-align: left;
+
+	div {
+		width: 50%;
+	    margin: none;
+	    display: inline-block;
+	    text-align: left;
+	}
+}
+
+#member-filters .filter-title {
+    margin-top: 1rem;
+    text-align: left;
+    font-weight: bold;
+}
+
 .navigation {
 
 	margin: 1rem 0 1rem 0;

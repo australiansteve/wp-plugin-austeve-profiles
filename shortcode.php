@@ -108,6 +108,36 @@ function austeve_profiles_shortcode_archive(){
         $filterSet = true;
 	}
 
+	//Build medium filter
+	if( !empty($_GET[ 'medium' ]) ) {
+
+		$medium_query = array(
+			'taxonomy'         => 'austeve_mediums',
+			'terms'            => explode(",", $_GET[ 'medium' ]),
+			'field'            => 'slug',
+			'operator'         => 'IN',
+			'include_children' => true,
+		);
+
+		$tax_query = array('relation' => 'AND');
+
+		// append tax query
+		$tax_query[] = array(
+			$medium_query
+		);
+
+		$args['tax_query'] = $tax_query;
+
+        $filterSet = true;
+	}
+
+	//Always search for profiles that do not have empty user values
+	$meta_query[] = array(
+		'key'         	=> 'profile-user',
+		'value'			=> array(''),
+		'compare'     	=> 'NOT IN'
+	);
+
 	$args['meta_query'] = $meta_query;
 
 	error_log("First time around: ".print_r($args, true));
@@ -189,6 +219,33 @@ function austeve_profiles_shortcode_archive(){
 				?>
 				</select>
 			</div>
+
+			<div class="col-sm-12 filter-group">
+				<div class='filter-title'>Mediums</div>
+				<div class="block-grid-xs-2 block-grid-sm-3 filter-mediums">
+				<?php
+					if(isset($_GET['medium']))
+					{
+						$searchedMediumArray = explode(',', $_GET['medium']);
+					}
+					else
+					{
+						$searchedMediumArray = array();
+					}
+					$terms = get_terms( array(
+					    'taxonomy' => 'austeve_mediums',
+					    'hide_empty' => true,
+					) );
+					error_log("TERMS: ".print_r($terms, true));
+					foreach($terms as $term)
+					{
+						$checked = in_array($term->slug, $searchedMediumArray) ? " CHECKED" : "";
+						echo "<div><input class='medium-filter' data-filter='medium' name='medium' type='checkbox' value='".$term->slug."'".$checked." onclick='return validateSearch()'>".$term->name."</input></div>";
+					}
+				?>
+				</div>
+			</div>
+
 			<?php if (isset($filterSet)) { ?>
 			<div class="col-sm-12 filter-group">
 				<input id="clear-filters" type="submit" onclick="return clearFilters()" value="Clear all filters"/>
@@ -299,7 +356,19 @@ function validateSearch() {
 			args[ filter ] = vals.join(',');
 			
 		});		
-		
+
+		var mediumfilters = [];
+		// loop over filters
+		jQuery('#member-filters .medium-filter').each(function(){
+			
+			if( jQuery(this).is(':checked') )
+			{
+				mediumfilters.push(jQuery(this).val());
+			}
+						
+		});
+		args[ 'medium' ] = mediumfilters.join(',');
+
 		// update url
 		url += '?';
 		
@@ -312,7 +381,9 @@ function validateSearch() {
 		
 		// remove last &
 		url = url.slice(0, -1);
-				
+
+		//console.log("going to: "+url);
+
 		// reload page
 		window.location.replace( url );		
 		return false;
