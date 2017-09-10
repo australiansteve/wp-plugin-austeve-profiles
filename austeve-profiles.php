@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Profiles - AUSteve Custom Post Type
+ * Plugin Name: Profiles - Sustainable Saint John
  * Plugin URI: https://github.com/australiansteve/wp-plugin-austeve-profiles
  * Description: Add, edit & display user profiles
  * Version: 1.0.0
@@ -228,42 +228,45 @@ add_action( 'pre_get_posts', 'austeve_profiles_pre_get_posts_archive', 1 );
 
 function austeve_profiles_modify_post_title( $post_id )
 {
+	error_log("austeve_profiles_modify_post_title");
 	if ('austeve-profiles' != get_post_type($post_id) || wp_is_post_revision($post_id)) {
 		return;
 	}
 
 	$user = get_field('user', $post_id);
-	$userfirstname = "";
-	$userlastname = "";
+	$createUser = get_field('create_user', $post_id);
+	$user_email = get_field('email', $post_id);
+	$userfirstname = get_field('firstname', $post_id);
+	$userlastname = get_field('lastname', $post_id);
+	$organization = get_field('organization_name', $post_id);
 
-	//If user field is not set in the profile, grab the current logged in user
-	if (!$user)
+	error_log("Profile user: ".print_r($user, true));
+	//If user field is not set in the profile, create a new user
+	if ($createUser && !$user)
 	{
-		$user = wp_get_current_user();
-		update_field( 'user', get_current_user_id(),  $post_id );
-		$userfirstname = $user->user_firstname;
-		$userlastname = $user->user_lastname;
+		error_log("User field is not set in profile - creating a new one");
+		$user_id = username_exists( $user_email );
+ 
+		if ( ! $user_id && false == email_exists( $user_email ) ) {
+		    $random_password = wp_generate_password( $length = 20, $include_standard_special_chars = true );
+		    $user_id = wp_create_user( $user_email, $random_password, $user_email );
+		}
+
+		error_log("New user ID: ".$user_id);
+		update_field( 'user', $user_id,  $post_id );
+		wp_update_user( array( 'ID' => $user_id, 'first_name' => $userfirstname, 'last_name' => $userlastname ) );
 	} 
-	else if (is_numeric($user))
-	{
-		//Sometimes the user is returned as a number (the id)
-		$userobject = get_user_by('id', $user);
-		$userfirstname = $userobject->user_firstname;
-		$userlastname = $userobject->user_lastname;
-	}
-	else 
-	{
-		//Sometimes it's returned as an array
-		$userfirstname = $user['user_firstname'];
-		$userlastname = $user['user_lastname'];
-	}
 
-	update_field( 'firstname', $userfirstname,  $post_id );
-	update_field( 'lastname', $userlastname,  $post_id );
-	
+	$postTitle = ($userfirstname || $userlastname) ? $userfirstname." ".$userlastname : "";
+	error_log("Iterim post title: ".$postTitle);
+	error_log("Org: ".$organization);
+	$postTitle = $organization && strlen(trim($postTitle)) > 0 ? $postTitle." (".$organization.")" : $postTitle;
+	$postTitle = strlen(trim($postTitle)) == 0 && $organization ? $organization : $postTitle;
+	error_log("Update post title to: ".$postTitle);
+
 	remove_action( 'acf/save_post', 'modify_post_title' , 50);
-	$slug = str_replace(' ', '-', $userfirstname." ".$userlastname);
-	wp_update_post( array( 'ID' => $post_id, 'post_title' => $userfirstname." ".$userlastname, 'post_name' => $slug ) );
+	$slug = str_replace(' ', '-', $postTitle);
+	wp_update_post( array( 'ID' => $post_id, 'post_title' => $postTitle, 'post_name' => $slug ) );
 	add_action( 'acf/save_post', 'modify_post_title' , 50);
 }
 
