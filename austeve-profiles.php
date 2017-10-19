@@ -12,7 +12,6 @@
 include( plugin_dir_path( __FILE__ ) . 'admin.php');
 include( plugin_dir_path( __FILE__ ) . 'shortcode.php');
 include( plugin_dir_path( __FILE__ ) . 'widget.php');
-include( plugin_dir_path( __FILE__ ) . 'AUSteveProfilesPageTemplater.php');
 
 /*
 * Creating a function to create our CPT
@@ -240,7 +239,29 @@ function austeve_profiles_modify_post_title( $post_id )
 	$userlastname = get_field('lastname', $post_id);
 	$organization = get_field('organization_name', $post_id);
 
+	error_log("Create user?: ".print_r($createUser, true));
 	error_log("Profile user: ".print_r($user, true));
+
+
+	if (!$createUser && !$user || !is_admin())
+	{
+		error_log("Request coming from front end (ie. logged in user)");
+		if ( is_user_logged_in() ) {
+			error_log("User IS logged in?");
+		    $current_user = wp_get_current_user();
+
+ 			remove_action( 'acf/save_post' , 'austeve_profiles_modify_post_title', 50 );
+			remove_action( 'profile_update', 'update_post_title_with_new_username', 5, 2);
+
+			update_field( 'user', $current_user->ID,  $post_id );
+			update_field( 'email', $current_user->user_email,  $post_id );
+			wp_update_user( array( 'ID' => $current_user->ID, 'first_name' => $userfirstname, 'last_name' => $userlastname ) );
+
+			add_action( 'acf/save_post' , 'austeve_profiles_modify_post_title', 50 );
+			add_action( 'profile_update', 'update_post_title_with_new_username', 5, 2);
+		}
+	}
+
 	//If user field is not set in the profile, create a new user
 	if ($createUser && !$user)
 	{
@@ -264,10 +285,10 @@ function austeve_profiles_modify_post_title( $post_id )
 	$postTitle = strlen(trim($postTitle)) == 0 && $organization ? $organization : $postTitle;
 	error_log("Update post title to: ".$postTitle);
 
-	remove_action( 'acf/save_post', 'modify_post_title' , 50);
+	remove_action( 'acf/save_post', 'austeve_profiles_modify_post_title' , 50);
 	$slug = str_replace(' ', '-', $postTitle);
 	wp_update_post( array( 'ID' => $post_id, 'post_title' => $postTitle, 'post_name' => $slug ) );
-	add_action( 'acf/save_post', 'modify_post_title' , 50);
+	add_action( 'acf/save_post', 'austeve_profiles_modify_post_title' , 50);
 }
 
 add_action( 'acf/save_post' , 'austeve_profiles_modify_post_title' , 50 ); //Priority of 50 means this is called after the post has actually been saved
@@ -320,8 +341,5 @@ function austeve_profiles_kses_post( $value ) {
 	return wp_kses_post( $value );
 }
 add_filter('acf/update_value', 'austeve_profiles_kses_post', 10, 1);
-
-//Adds a page template so that 'Edit Profile' can be done
-add_action( 'plugins_loaded', array( 'AUSteveProfilesPageTemplater', 'get_instance' ) );
 
 ?>
