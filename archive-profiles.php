@@ -25,6 +25,7 @@ get_header(); ?>
 					?>
 				</header><!-- .page-header -->
 				
+				<div class="row small-up-1 medium-up-2">
 				<?php /* Start the Loop */ ?>
 				<?php while ( have_posts() ) : the_post(); ?>
 
@@ -38,6 +39,7 @@ get_header(); ?>
 					?>
 
 				<?php endwhile; ?>
+				</div>
 
 				<?php the_posts_navigation(array(
 		            'prev_text'          => __( 'Next page' ),

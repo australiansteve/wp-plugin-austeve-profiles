@@ -7,14 +7,14 @@
  * @package AUSteve Projects
  */
 ?>
-<div class="row columns profile-archive-item">
+<div class="column profile-archive-item">
 
 	<div class="row">
 
 		<div class="columns small-12 medium-3 profile-image">
 			<?php 
 			//echo the_ID();
-			$image = get_field('profile-picture'); 
+			$image = get_field('logo'); 
 			//var_dump($image);
 			?>
 
@@ -34,31 +34,38 @@
 
 			<a href="<?php echo get_permalink(); ?>">
 				<h2 class="profile-name">
-				<?php $user = get_field('profile-user'); 
-				if (is_numeric($user))
+				<?php 
+				$organization = get_field('organization_name');
+
+				if ($organization)
 				{
-					//Sometimes the user is returned as a number (the id)
-					$userobject = get_user_by('id', $user);
-					echo $userobject->user_firstname." ".$userobject->user_lastname;
+					echo $organization;
 				}
 				else 
 				{
-					echo $user['user_firstname']." ".$user['user_lastname'];
+					$user = get_field('user'); 
+					error_log("User: ".print_r($user, true));
+					if (is_numeric($user))
+					{
+						//Sometimes the user is returned as a number (the id)
+						$userobject = get_user_by('id', $user);
+						echo $userobject->user_firstname." ".$userobject->user_lastname;
+					}
+					else 
+					{
+						echo $user['user_firstname']." ".$user['user_lastname'];
+					}
 				}
 				?>
 				</h2>
 			</a>
 
-			<p class="profile-about"><em><?php echo get_field('about'); ?></em></p>
+			<?php if (get_field('website')) : ?>
+				<p class="contact website"><a href="<?php echo get_field('website'); ?>" target="_blank" alt="View Website">View Website</a></p>
+			<?php endif; ?>
 
 		</div>
 
-	</div>
-
-	<div class="row">
-		<div class="columns small-12">
-			<p class="profile-view-link"><a href="<?php echo get_permalink(); ?>">View profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a></p>
-		</div>
 	</div>
 
 </div>
